@@ -1,0 +1,93 @@
+{
+    "name": "TS-Biro • Knjigovodstvo Sisak | Računovodstvene usluge",
+    "short_name": "TS-Biro",
+    "description": "Profesionalno knjigovodstvo, računovodstvo i financijsko savjetovanje u Sisku i Hrvatskoj",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#002625",
+    "orientation": "portrait-primary",
+    "scope": "/",
+    "lang": "hr",
+    "dir": "ltr",
+    "categories": [
+        "business",
+        "finance",
+        "productivity"
+    ],
+    "icons": [
+        {
+            "src": "images/icons/favicon-16x16.png",
+            "sizes": "16x16",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "images/icons/favicon-32x32.png",
+            "sizes": "32x32",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "images/icons/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "images/icons/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "images/icons/favicon.ico",
+            "sizes": "64x64 32x32 24x24 16x16",
+            "type": "image/x-icon"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "images/screenshots/desktop.jpg",
+            "sizes": "1280x720",
+            "type": "image/jpeg",
+            "form_factor": "wide",
+            "label": "TS-Biro desktop stranica"
+        },
+        {
+            "src": "images/screenshots/mobile.jpg",
+            "sizes": "750x1334",
+            "type": "image/jpeg",
+            "form_factor": "narrow",
+            "label": "TS-Biro mobilna stranica"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Kontaktirajte nas",
+            "short_name": "Kontakt",
+            "description": "Pošaljite upit za ponudu",
+            "url": "/#kontakt",
+            "icons": [
+                {
+                    "src": "images/icons/contact-icon.png",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "Naše usluge",
+            "short_name": "Usluge",
+            "description": "Pregled svih računovodstvenih usluga",
+            "url": "/#usluge",
+            "icons": [
+                {
+                    "src": "images/icons/services-icon.png",
+                    "sizes": "96x96"
+                }
+            ]
+        }
+    ],
+    "related_applications": [],
+    "prefer_related_applications": false
+}
