@@ -109,9 +109,9 @@ header {
     transition: var(--transition);
 }
 
-/* Hero Section - najvažnije za LCP */
+/* Enhanced Hero Section gradient */
 .hero {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    background: var(--gradient-primary);
     color: var(--white);
     padding: 4rem 0;
     text-align: center;
@@ -121,7 +121,6 @@ header {
     display: flex;
     align-items: center;
     isolation: isolate;
-    /* Fix stacking context */
 }
 
 .hero::before {
@@ -131,6 +130,9 @@ header {
     left: 0;
     right: 0;
     bottom: 0;
+    background:
+        radial-gradient(circle at 20% 80%, rgba(218, 165, 32, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(218, 165, 32, 0.1) 0%, transparent 50%);
     z-index: -1;
 }
 
@@ -161,6 +163,112 @@ header {
     gap: 1rem;
     justify-content: center;
     flex-wrap: wrap;
+}
+
+/* Service page hero with enhanced gradient */
+.service-hero {
+    background:
+        var(--gradient-secondary),
+        linear-gradient(135deg, #002625cc 0%, #001716cc 100%);
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: overlay;
+    color: var(--white);
+    padding: 4rem 0;
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.service-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(circle at 10% 90%, rgba(218, 165, 32, 0.2) 0%, transparent 40%),
+        radial-gradient(circle at 90% 10%, rgba(255, 255, 255, 0.1) 0%, transparent 40%);
+    z-index: 1;
+}
+
+.service-hero .hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.service-hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: goldenrod;
+}
+
+.service-hero .lead {
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin: 0 auto 2rem;
+    opacity: 0.9;
+}
+
+/* Breadcrumbs styling - add to critical.css */
+.breadcrumbs {
+    padding: 0.5rem 0;
+    margin-bottom: 1.5rem;
+    background-color: var(--light);
+    border-radius: var(--border-radius);
+}
+
+.breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.breadcrumb-item:not(:last-child)::after {
+    content: '›';
+    color: var(--gray);
+    font-weight: bold;
+    margin-left: 0.5rem;
+}
+
+.breadcrumb-link {
+    color: var(--primary);
+    text-decoration: none;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--border-radius-sm);
+}
+
+.breadcrumb-link:hover,
+.breadcrumb-link:focus {
+    color: var(--primary-dark);
+    background-color: rgba(0, 38, 37, 0.05);
+    text-decoration: none;
+}
+
+.breadcrumb-link i {
+    font-size: 0.8rem;
+}
+
+.breadcrumb-current {
+    color: var(--secondary);
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    background: rgba(218, 165, 32, 0.1);
+    border-radius: var(--border-radius-sm);
 }
 
 /* Basic buttons - kritično za CTA */
@@ -246,30 +354,6 @@ header {
     color: var(--primary-dark);
     font-weight: 600;
     background-color: var(--light-gray);
-}
-
-/* Service page hero - vidljiv odmah */
-.service-hero {
-    background: linear-gradient(135deg, #002625cc 0%, #001716cc 100%);
-    background-size: cover;
-    background-position: center;
-    color: var(--white);
-    padding: 4rem 0;
-    text-align: center;
-    margin-bottom: 3rem;
-}
-
-.service-hero h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    color: var(--white);
-}
-
-.service-hero .lead {
-    font-size: 1.2rem;
-    max-width: 800px;
-    margin: 0 auto 2rem;
-    opacity: 0.9;
 }
 
 /* Ensure content is visible */
@@ -399,4 +483,37 @@ a:focus {
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+}
+
+/* Header - kritično za FCP */
+header {
+    background-color: var(--white);
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+}
+
+/* Header Logo with shadow - kritično za FCP */
+.logo img {
+    width: 180px;
+    height: auto;
+    transition: var(--transition);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0));
+    transform: translateZ(0);
+    /*GPUacceleration*/:;
+    -webkit-filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0));
+}
+
+/* Logo hover effect */
+.logo:hover img {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+    transform: translateY(-1px);
 }
