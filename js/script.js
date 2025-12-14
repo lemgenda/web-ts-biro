@@ -1,1009 +1,781 @@
-/**
- * TS-Biro Knjigovodstveni Servis - Glavna JavaScript datoteka
- *
- * Ova datoteka sadrži sve funkcionalnosti za web stranicu TS-Biro knjigovodstvenog servisa:
- *
- * 1. Mobilni meni - Upravlja prikazom navigacijskog izbornika na mobilnim uređajima
- * 2. Kontakt forme - Upravlja slanjem i validacijom kontakt formi (UKLJUČUJUĆI CHECKBOXOVE)
- * 3. FAQ sekcija - Upravlja prikazom i skrivanjem odgovora na česta pitanja
- * 4. Testimonial karusel - Prikazuje klijentske iskaze u rotirajućem karuselu
- * 5. Back to top dugme - Omogućava brzi povratak na vrh stranice
- * 6. Cookie suglasnost - Upravlja prihvaćanjem kolačića
- * 7. Obavijesti - Prikazuje korisničke obavijesti
- * 8. Validacija formi - Poboljšana validacija unosnih polja
- * 9. SEO optimizacija - Strukturirani podaci i meta tagovi za bolju pretraživost
- * 10. Lazy loading - Učitanje slika po potrebi za bolje performanse
- * 11. Glatko skrolanje - Glatko pomicanje do anchor linkova
- * 12. Navigacija tipkovnicom - Pristupačnost za korisnike tipkovnice
- * 13. Service Worker registracija - PWA funkcionalnosti
- * 14. Breadcrumbs - Dinamička navigacija putanja
- * 15. Google Analytics - Praćenje konverzija (opcionalno)
- */
-
 (function () {
     'use strict';
 
     // Configuration
     const CONFIG = {
+        modules: {
+            main: true,
+            forms: true,
+            seo: true,
+            analytics: true
+        },
+        siteInfo: {
+            name: 'TS-Biro Knjigovodstvo Sisak',
+            baseUrl: window.location.hostname === '127.0.0.1' ?
+                'http://127.0.0.1:5500' : 'https://www.ts-biro.hr',
+            logo: 'images/TS-Biro-Circle-logo.svg',
+            currentYear: new Date().getFullYear(),
+            phone: '+385 91 521 2770',
+            email: 'info@ts-biro.hr',
+            address: 'Ferde Livadića 29, 44000 Sisak'
+        },
         analytics: {
             enabled: false,
-            trackingId: 'UA-XXXXX-Y' // Replace with actual tracking ID
+            trackingId: 'G-5XPS37WT1X',
+            measurementId: 'G-5XPS37WT1X'
         },
         contact: {
-            endpoint: 'https://formspree.io/f/xxxxxxxx', // Replace with actual endpoint
-            timeout: 10000
-        },
-        seo: {
-            updateTitle: true,
-            updateMetaDescription: true
+            endpoint: 'https://formspree.io/f/xxxxxxxx'
         }
     };
 
-    // Load non-critical CSS
-    function loadNonCriticalCSS() {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = 'css/non-critical.css';
-        link.media = 'all';
-        document.head.appendChild(link);
-        console.log('Non-critical CSS loaded');
-    }
+    // Dynamic module loader
+    function loadModule(moduleName) {
+        if (!CONFIG.modules[moduleName]) return Promise.resolve();
 
-    // Load Font Awesome
-    function loadFontAwesome() {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
-        link.crossOrigin = 'anonymous';
-        document.head.appendChild(link);
-        console.log('Font Awesome loaded');
-    }
+        return new Promise((resolve, reject) => {
+            try {
+                // Check if module is already loaded
+                if (window[`TSBiro${moduleName.charAt(0).toUpperCase() + moduleName.slice(1)}`]) {
+                    resolve();
+                    return;
+                }
 
-    // Initialize Google Analytics (optional)
-    function initializeGoogleAnalytics() {
-        if (!CONFIG.analytics.enabled) return;
-
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', CONFIG.analytics.trackingId, {
-            page_title: document.title,
-            page_location: window.location.href,
-            page_path: window.location.pathname
-        });
-
-        // Load Google Analytics script
-        const script = document.createElement('script');
-        script.async = true;
-        script.src = `https://www.googletagmanager.com/gtag/js?id=${CONFIG.analytics.trackingId}`;
-        document.head.appendChild(script);
-
-        console.log('Google Analytics initialized');
-    }
-
-    // Track events for analytics
-    function trackEvent(category, action, label = null, value = null) {
-        if (!CONFIG.analytics.enabled) return;
-
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-            'event': 'customEvent',
-            'eventCategory': category,
-            'eventAction': action,
-            'eventLabel': label,
-            'eventValue': value
+                const script = document.createElement('script');
+                script.src = `js/${moduleName}.js?v=${CONFIG.siteInfo.currentYear}`;
+                script.defer = true;
+                script.onload = () => {
+                    resolve();
+                };
+                script.onerror = (error) => {
+                    console.warn(`Module ${moduleName} failed to load:`, error);
+                    reject(new Error(`Module ${moduleName} failed to load`));
+                };
+                document.head.appendChild(script);
+            } catch (error) {
+                console.warn(`Error loading module ${moduleName}:`, error);
+                reject(error);
+            }
         });
     }
 
-    // Update SEO meta tags dynamically
-    function updateSEOMetaTags() {
-        if (!CONFIG.seo.updateTitle && !CONFIG.seo.updateMetaDescription) return;
+    // Generate header with navigation
+    function generateHeader() {
+        const header = document.querySelector('header');
+        if (!header) return;
 
-        const currentPath = window.location.pathname;
-        const pageMappings = {
-            '/knjigovodstvo-racunovodstvo.html': {
-                title: 'Knjigovodstvo Sisak | Računovodstvene usluge za tvrtke i obrte - TS-Biro',
-                description: 'Kompletno knjigovodstvo u Sisku ✓ Vođenje poslovnih knjiga ✓ Porezne prijave ✓ Povjerenje i preciznost ✓ 30+ godina iskustva.',
-                keywords: 'knjigovodstvo Sisak, računovodstvene usluge, vođenje knjiga, porezne prijave, knjigovodstvo za obrte'
-            },
-            '/place-kadrovska-evidencija.html': {
-                title: 'Obračun Plaća Sisak | Kadrovska evidencija za tvrtke - TS-Biro',
-                description: 'Obračun plaća u Sisku ✓ Kadrovska administracija ✓ Pravovremeno i točno ✓ Zaštita podataka ✓ Profesionalni tim.',
-                keywords: 'obračun plaća Sisak, kadrovska evidencija, prijave radnika, isplatne liste, plaće za tvrtke'
-            },
-            '/financijsko-poslovno-savjetovanje.html': {
-                title: 'Financijsko savjetovanje Sisak | Poslovno planiranje za tvrtke - TS-Biro',
-                description: 'Financijsko i poslovno savjetovanje u Sisku ✓ Analiza poslovanja ✓ Planiranje rasta ✓ Optimizacija troškova ✓ Praktična rješenja.',
-                keywords: 'financijsko savjetovanje Sisak, poslovno savjetovanje, analiza poslovanja, optimizacija troškova'
-            },
-            '/sudsko-vjestacenje.html': {
-                title: 'Financijska vještačenja Sisak | Sudska i privatna vještačenja - TS-Biro',
-                description: 'Financijska i računovodstvena vještačenja u Sisku ✓ Za sudske postupke ✓ Stručno i nepristrano ✓ Diskrecija ✓ Brzi rokovi.',
-                keywords: 'vještačenja Sisak, sudska vještačenja, financijska vještačenja, računovodstvena vještačenja'
-            },
-            '/privatnost.html': {
-                title: 'Politika privatnosti | TS-Biro',
-                description: 'Politika privatnosti TS-Biro knjigovodstvenog servisa. Saznajte kako prikupljamo, koristimo i štitimo vaše podatke.',
-                keywords: 'politika privatnosti, zaštita podataka, GDPR, privatnost, TS-Biro'
-            },
-            '/uvjeti.html': {
-                title: 'Uvjeti korištenja | TS-Biro',
-                description: 'Uvjeti korištenja web stranice TS-Biro knjigovodstvenog servisa. Saznajte pravila i odredbe korištenja naših usluga.',
-                keywords: 'uvjeti korištenja, pravila, odredbe, korištenje web stranice, TS-Biro'
-            },
-            '/404.html': {
-                title: 'Stranica nije pronađena | TS-Biro',
-                description: 'Stranica koju tražite ne postoji. Vratite se na početnu stranicu TS-Biro knjigovodstvenog servisa.',
-                keywords: '404, stranica nije pronađena, error, TS-Biro'
-            }
-        };
-
-        if (pageMappings[currentPath]) {
-            const pageInfo = pageMappings[currentPath];
-
-            if (CONFIG.seo.updateTitle) {
-                document.title = pageInfo.title;
-            }
-
-            if (CONFIG.seo.updateMetaDescription) {
-                let metaDescription = document.querySelector('meta[name="description"]');
-                if (!metaDescription) {
-                    metaDescription = document.createElement('meta');
-                    metaDescription.name = 'description';
-                    document.head.appendChild(metaDescription);
-                }
-                metaDescription.content = pageInfo.description;
-
-                // Update keywords
-                let metaKeywords = document.querySelector('meta[name="keywords"]');
-                if (!metaKeywords) {
-                    metaKeywords = document.createElement('meta');
-                    metaKeywords.name = 'keywords';
-                    document.head.appendChild(metaKeywords);
-                }
-                metaKeywords.content = pageInfo.keywords;
-            }
-
-            console.log('SEO meta tags updated for:', currentPath);
-        }
-    }
-
-    // Initialize all functionality
-    function init() {
-        console.log('DOM loaded, initializing all functionalities');
-
-        // Load non-critical resources
-        loadNonCriticalCSS();
-        loadFontAwesome();
-
-        // Initialize analytics
-        initializeGoogleAnalytics();
-
-        // Update SEO meta tags
-        updateSEOMetaTags();
-
-        // Initialize all components
-        initializeMobileMenu();
-        initializeFAQ();
-        initializeTestimonialCarousel();
-        initializeHeroSlider();
-        initializeBackToTop();
-        initializeCookieConsent();
-        initializeContactForms();
-        initializeSmoothScrolling();
-        initializeServiceWorker();
-        initializeBreadcrumbs();
-        initializeLazyLoading();
-        initializeKeyboardNavigation();
-
-        // Track page view
-        trackEvent('page', 'view', document.title);
-
-        console.log('All functionalities successfully initialized');
-    }
-
-    // SERVICE WORKER REGISTRATION
-    function initializeServiceWorker() {
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function () {
-                // Use correct path for your GitHub Pages structure
-                navigator.serviceWorker.register('./js/service-worker.js')
-                    .then(function (registration) {
-                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                        trackEvent('pwa', 'service_worker_registered');
-                    })
-                    .catch(function (error) {
-                        console.log('ServiceWorker registration failed: ', error);
-                        trackEvent('pwa', 'service_worker_failed', error.message);
-                        // Optional: Only show error in development
-                        if (window.location.hostname === 'localhost') {
-                            console.warn('Service Worker not available - this is normal for development');
-                        }
-                    });
-            });
-        }
-    }
-
-    // BREADCRUMBS INITIALIZATION
-    function initializeBreadcrumbs() {
-        const breadcrumbContainer = document.querySelector('.breadcrumb ol');
-        if (!breadcrumbContainer) return;
-
-        const currentPage = document.title.replace('TS-Biro | ', '');
-        const currentUrl = window.location.pathname;
-
-        // Define page mappings for breadcrumbs
-        const pageMappings = {
-            '/knjigovodstvo-racunovodstvo.html': 'Računovodstvo',
-            '/place-kadrovska-evidencija.html': 'Plaće',
-            '/financijsko-poslovno-savjetovanje.html': 'Savjetovanje',
-            '/sudsko-vjestacenje.html': 'Vještačenje',
-            '/privatnost.html': 'Politika privatnosti',
-            '/uvjeti.html': 'Uvjeti korištenja',
-            '/404.html': '404 Stranica nije pronađena',
-            '/index.html': 'Početna',
-            '/': 'Početna'
-        };
-
-        // Clear existing breadcrumbs except home
-        const existingItems = breadcrumbContainer.querySelectorAll('li:not(:first-child)');
-        existingItems.forEach(item => item.remove());
-
-        // Add current page to breadcrumbs if not home
-        if (currentUrl !== '/' && currentUrl !== '/index.html' && pageMappings[currentUrl]) {
-            const currentItem = document.createElement('li');
-            currentItem.setAttribute('itemprop', 'itemListElement');
-            currentItem.setAttribute('itemscope', '');
-            currentItem.setAttribute('itemtype', 'https://schema.org/ListItem');
-
-            currentItem.innerHTML = `
-            <span itemprop="name">${pageMappings[currentUrl]}</span>
-            <meta itemprop="position" content="2" />
+        header.innerHTML = `
+            <div class="container">
+                <div class="header-container">
+                    <a href="./" class="logo" aria-label="TS-Biro Knjigovodstvo Sisak - Početna stranica" title="TS-Biro - Obiteljska računovodstvena tvrtka u Sisku">
+                        <img src="${CONFIG.siteInfo.logo}" width="128" height="50"
+                             alt="TS-Biro Knjigovodstvo Sisak - Profesionalno računovodstvo"
+                             title="TS-Biro - Obiteljska računovodstvena tvrtka u Sisku"
+                             loading="eager" class="logo-img">
+                    </a>
+                </div>
+            </div>
         `;
 
-            breadcrumbContainer.appendChild(currentItem);
-        }
-
-        // Update breadcrumb structured data
-        updateBreadcrumbStructuredData(currentPage, currentUrl);
+        generateNavigation();
     }
 
-    function updateBreadcrumbStructuredData(currentPage, currentUrl) {
-        const pageMappings = {
-            '/knjigovodstvo-racunovodstvo.html': 'Računovodstvo',
-            '/place-kadrovska-evidencija.html': 'Plaće',
-            '/financijsko-poslovno-savjetovanje.html': 'Savjetovanje',
-            '/sudsko-vjestacenje.html': 'Vještačenje',
-            '/privatnost.html': 'Politika privatnosti',
-            '/uvjeti.html': 'Uvjeti korištenja'
-        };
+    // Generate navigation with SEO-optimized links
+    function generateNavigation() {
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        const isLegalPage = ['404.html', 'privatnost.html', 'uvjeti.html'].includes(currentPage);
+        const isHomePage = currentPage === 'index.html' || currentPage === '';
 
-        const breadcrumbData = {
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            "itemListElement": [
-                {
-                    "@type": "ListItem",
-                    "position": 1,
-                    "name": "Početna",
-                    "item": "https://www.ts-biro.hr/"
+        const navItems = [
+            {
+                text: 'Usluge',
+                href: isHomePage ? '#usluge' : './#usluge',
+                title: 'Računovodstvene usluge TS-Biro Sisak'
+            },
+            {
+                text: 'O nama',
+                href: isHomePage ? '#onama' : './#onama',
+                title: 'O nama - TS-Biro računovodstvena tvrtka Sisak'
+            },
+            {
+                text: 'Klijenti',
+                href: isHomePage ? '#klijenti' : './#klijenti',
+                title: 'Iskustva klijenata - TS-Biro knjigovodstvo Sisak'
+            },
+            {
+                text: 'Kontakt',
+                href: isLegalPage || isHomePage ? './#kontakt' : '#kontakt',
+                title: 'Kontaktirajte TS-Biro knjigovodstvo Sisak'
+            },
+            {
+                text: 'Računovodstvo',
+                href: './knjigovodstvo-racunovodstvo.html',
+                title: 'Knjigovodstvo i računovodstvene usluge Sisak - TS-Biro'
+            },
+            {
+                text: 'Plaće',
+                href: './place-kadrovska-evidencija.html',
+                title: 'Obračun plaća i kadrovska evidencija Sisak - TS-Biro'
+            },
+            {
+                text: 'Savjetovanje',
+                href: './financijsko-poslovno-savjetovanje.html',
+                title: 'Financijsko i poslovno savjetovanje Sisak - TS-Biro'
+            },
+            {
+                text: 'Vještačenje',
+                href: './sudsko-vjestacenje.html',
+                title: 'Financijska i računovodstvena vještačenja Sisak - TS-Biro'
+            }
+        ];
+
+        const headerContainer = document.querySelector('.header-container');
+        if (!headerContainer) return;
+
+        const nav = document.createElement('nav');
+        nav.setAttribute('aria-label', 'Glavna navigacija TS-Biro knjigovodstvo');
+
+        nav.innerHTML = `
+            <button class="mobile-menu-btn" aria-expanded="false" aria-controls="primary-navigation"
+                    aria-label="Otvori navigacijski izbornik TS-Biro" title="Navigacijski izbornik">
+                <span class="sr-only">Meni</span>
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <ul class="nav-menu" id="primary-navigation">
+                ${navItems.map(item => `
+                    <li class="nav-item">
+                        <a href="${item.href}" class="nav-link" title="${item.title}">
+                            ${item.text}
+                        </a>
+                    </li>
+                `).join('')}
+            </ul>
+        `;
+
+        headerContainer.appendChild(nav);
+    }
+
+    // Generate navigation breadcrumbs
+    function generateBreadcrumbs() {
+        try {
+            const breadcrumbsElement = document.querySelector('.breadcrumbs');
+            if (!breadcrumbsElement) return;
+
+            let container = breadcrumbsElement.querySelector('.container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'container';
+                breadcrumbsElement.appendChild(container);
+            }
+
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+
+            const pageMappings = {
+                'knjigovodstvo-racunovodstvo.html': {
+                    name: 'Knjigovodstvo i računovodstvene usluge Sisak',
+                    icon: 'fa-book',
+                    url: 'knjigovodstvo-racunovodstvo.html',
+                    keyword: 'knjigovodstvo Sisak'
+                },
+                'place-kadrovska-evidencija.html': {
+                    name: 'Obračun Plaća i Kadrovska Evidencija Sisak',
+                    icon: 'fa-calculator',
+                    url: 'place-kadrovska-evidencija.html',
+                    keyword: 'obračun plaća Sisak'
+                },
+                'financijsko-poslovno-savjetovanje.html': {
+                    name: 'Financijsko i Poslovno Savjetovanje Sisak',
+                    icon: 'fa-chart-line',
+                    url: 'financijsko-poslovno-savjetovanje.html',
+                    keyword: 'financijsko savjetovanje Sisak'
+                },
+                'sudsko-vjestacenje.html': {
+                    name: 'Financijska i Računovodstvena Vještačenja Sisak',
+                    icon: 'fa-balance-scale',
+                    url: 'sudsko-vjestacenje.html',
+                    keyword: 'vještačenja Sisak'
+                },
+                'privatnost.html': {
+                    name: 'Politika Privatnosti',
+                    icon: 'fa-shield-alt',
+                    url: 'privatnost.html',
+                    keyword: 'politika privatnosti'
+                },
+                'uvjeti.html': {
+                    name: 'Uvjeti Korištenja',
+                    icon: 'fa-file-contract',
+                    url: 'uvjeti.html',
+                    keyword: 'uvjeti korištenja'
+                },
+                '404.html': {
+                    name: 'Stranica nije pronađena',
+                    icon: 'fa-exclamation-triangle',
+                    url: '404.html',
+                    keyword: '404 stranica'
+                },
+                'index.html': {
+                    name: 'Početna - TS-Biro Knjigovodstvo Sisak',
+                    icon: 'fa-home',
+                    url: 'index.html',
+                    keyword: 'početna stranica'
                 }
-            ]
-        };
+            };
 
-        if (currentUrl !== '/' && currentUrl !== '/index.html' && pageMappings[currentUrl]) {
-            breadcrumbData.itemListElement.push({
-                "@type": "ListItem",
-                "position": 2,
-                "name": pageMappings[currentUrl],
-                "item": `https://www.ts-biro.hr${currentUrl}`
-            });
-        }
-
-        // Remove existing breadcrumb script
-        const existingScript = document.querySelector('script[data-type="breadcrumb"]');
-        if (existingScript) {
-            existingScript.remove();
-        }
-
-        // Add new breadcrumb script
-        const script = document.createElement('script');
-        script.setAttribute('type', 'application/ld+json');
-        script.setAttribute('data-type', 'breadcrumb');
-        script.textContent = JSON.stringify(breadcrumbData);
-        document.head.appendChild(script);
-    }
-
-    // LAZY LOADING IMAGES
-    function initializeLazyLoading() {
-        if ('IntersectionObserver' in window) {
-            const lazyImages = document.querySelectorAll('img[data-src]');
-
-            const imageObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const img = entry.target;
-                        img.src = img.dataset.src;
-                        img.removeAttribute('data-src');
-                        observer.unobserve(img);
-                    }
-                });
-            });
-
-            lazyImages.forEach(img => imageObserver.observe(img));
-        } else {
-            // Fallback for older browsers
-            const lazyImages = document.querySelectorAll('img[data-src]');
-            lazyImages.forEach(img => {
-                img.src = img.dataset.src;
-                img.removeAttribute('data-src');
-            });
-        }
-    }
-
-    // KEYBOARD NAVIGATION
-    function initializeKeyboardNavigation() {
-        document.addEventListener('keydown', function (e) {
-            // Skip if user is typing in an input/textarea
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) {
+            const pageInfo = pageMappings[currentPage];
+            if (!pageInfo) {
+                breadcrumbsElement.style.display = 'none';
                 return;
             }
 
-            // Escape key closes mobile menu
-            if (e.key === 'Escape') {
-                const mobileMenu = document.querySelector('.nav-menu.active');
-                if (mobileMenu) {
-                    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
-                    mobileMenu.classList.remove('active');
-                    mobileMenuBtn.querySelector('i').className = 'fa-solid fa-bars';
-                }
+            const isHomePage = currentPage === 'index.html' || currentPage === '';
 
-                // Also close any open FAQ items
-                const openFAQ = document.querySelector('.faq-question[aria-expanded="true"]');
-                if (openFAQ) {
-                    const answer = openFAQ.nextElementSibling;
-                    const icon = openFAQ.querySelector('.faq-icon');
-                    openFAQ.setAttribute('aria-expanded', 'false');
-                    answer.classList.remove('active');
-                    if (icon) icon.textContent = '+';
-                }
+            let breadcrumbHTML = `
+            <nav aria-label="Navigacijski put" class="breadcrumb-container">
+                <ol class="breadcrumb-nav" aria-label="Navigacijski put TS-Biro" itemscope itemtype="https://schema.org/BreadcrumbList">
+                    <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                        <a href="./" class="breadcrumb-link" itemprop="item" title="Početna stranica TS-Biro knjigovodstvo">
+                            <i class="fas fa-home" aria-hidden="true"></i>
+                            <span itemprop="name">Početna - TS-Biro Sisak</span>
+                        </a>
+                        <meta itemprop="position" content="1" />
+                    </li>
+            `;
+
+            if (!isHomePage) {
+                breadcrumbHTML += `
+                    <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                        <span class="breadcrumb-current" aria-current="page" itemprop="item">
+                            <i class="fas ${pageInfo.icon}" aria-hidden="true"></i>
+                            <span itemprop="name">${pageInfo.name}</span>
+                        </span>
+                        <meta itemprop="position" content="2" />
+                    </li>
+                `;
             }
 
-            // Tab key navigation enhancement
-            if (e.key === 'Tab') {
-                const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-                const focusableContent = document.querySelectorAll(focusableElements);
-                const firstFocusableElement = focusableContent[0];
-                const lastFocusableElement = focusableContent[focusableContent.length - 1];
+            breadcrumbHTML += `
+                </ol>
+            </nav>
+            `;
 
-                // Handle shift+tab
-                if (e.shiftKey) {
-                    if (document.activeElement === firstFocusableElement) {
-                        e.preventDefault();
-                        lastFocusableElement.focus();
+            container.innerHTML = breadcrumbHTML;
+
+            // Update breadcrumb structured data
+            updateBreadcrumbStructuredData(currentPage, pageInfo);
+        } catch (error) {
+            console.warn('Breadcrumb generation error:', error);
+        }
+    }
+
+    // Update breadcrumb structured data
+    function updateBreadcrumbStructuredData(currentPage, pageInfo) {
+        try {
+            const isHomePage = currentPage === 'index.html' || currentPage === '';
+            const baseUrl = CONFIG.siteInfo.baseUrl;
+
+            const breadcrumbData = {
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Početna - TS-Biro Knjigovodstvo Sisak",
+                        "item": baseUrl + "/"
                     }
-                } else {
-                    if (document.activeElement === lastFocusableElement) {
-                        e.preventDefault();
-                        firstFocusableElement.focus();
-                    }
-                }
-            }
-        });
-    }
+                ]
+            };
 
-    // 1. MOBILE MENI
-    function initializeMobileMenu() {
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const navMenu = document.querySelector('.nav-menu');
-
-        if (mobileMenuBtn && navMenu) {
-            mobileMenuBtn.addEventListener('click', function () {
-                const isExpanded = this.getAttribute('aria-expanded') === 'true';
-                this.setAttribute('aria-expanded', !isExpanded);
-                navMenu.classList.toggle('active');
-
-                // Update hamburger icon
-                const icon = this.querySelector('i');
-                if (icon) {
-                    icon.className = navMenu.classList.contains('active')
-                        ? 'fa-solid fa-times'
-                        : 'fa-solid fa-bars';
-                }
-
-                // Track menu toggle
-                trackEvent('navigation', 'mobile_menu_toggle', isExpanded ? 'close' : 'open');
-            });
-
-            // Close menu when clicking on links
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    if (navMenu.classList.contains('active')) {
-                        mobileMenuBtn.setAttribute('aria-expanded', 'false');
-                        navMenu.classList.remove('active');
-                        mobileMenuBtn.querySelector('i').className = 'fa-solid fa-bars';
-
-                        // Track navigation click
-                        trackEvent('navigation', 'menu_link_click', link.textContent.trim());
-                    }
+            if (!isHomePage) {
+                breadcrumbData.itemListElement.push({
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": pageInfo.name,
+                    "item": baseUrl + "/" + pageInfo.url
                 });
+            }
+
+            // Remove existing breadcrumb structured data
+            const existingScript = document.querySelector('script[data-type="breadcrumb-dynamic"]');
+            if (existingScript) {
+                existingScript.remove();
+            }
+
+            const script = document.createElement('script');
+            script.type = 'application/ld+json';
+            script.setAttribute('data-type', 'breadcrumb-dynamic');
+            script.textContent = JSON.stringify(breadcrumbData);
+            document.head.appendChild(script);
+        } catch (error) {
+            console.warn('Breadcrumb structured data error:', error);
+        }
+    }
+
+    // Generate footer with optimized content
+    function generateFooter() {
+        const footer = document.querySelector('footer');
+        if (!footer) return;
+
+        footer.innerHTML = `
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <div class="logo" itemscope itemtype="https://schema.org/AccountingService">
+                            <img src="${CONFIG.siteInfo.logo}" width="255" height="100"
+                                 alt="TS-Biro Knjigovodstvo Sisak - Logo"
+                                 title="TS-Biro - Obiteljska računovodstvena tvrtka"
+                                 loading="lazy" class="logo-img">
+                        </div>
+                        <p>Tvoja sigurnost. Tvoj servis. Tvoje savjetništvo.</p>
+                        <div class="social-links">
+                            <a href="https://facebook.com/tsbiro" aria-label="TS-Biro Facebook stranica" title="TS-Biro na Facebooku" rel="noopener noreferrer">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="https://linkedin.com/company/ts-biro" aria-label="TS-Biro LinkedIn profil" title="TS-Biro na LinkedInu" rel="noopener noreferrer">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="https://instagram.com/tsbiro" aria-label="TS-Biro Instagram profil" title="TS-Biro na Instagramu" rel="noopener noreferrer">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Usluge</h3>
+                        <ul>
+                            <li><a href="./knjigovodstvo-racunovodstvo.html" title="Knjigovodstvo Sisak">Računovodstvo Sisak</a></li>
+                            <li><a href="./place-kadrovska-evidencija.html" title="Obračun plaća Sisak">Obračun Plaća Sisak</a></li>
+                            <li><a href="./financijsko-poslovno-savjetovanje.html" title="Financijsko savjetovanje Sisak">Savjetovanje Sisak</a></li>
+                            <li><a href="./sudsko-vjestacenje.html" title="Vještačenja Sisak">Vještačenje Sisak</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Linkovi</h3>
+                        <ul>
+                            <li><a href="./#onama" title="O nama TS-Biro">O nama</a></li>
+                            <li><a href="./#klijenti" title="Iskustva klijenata">Klijenti</a></li>
+                            <li><a href="./#kontakt" title="Kontakt TS-Biro">Kontakt</a></li>
+                            <li><a href="./privatnost.html" title="Politika privatnosti">Privatnost</a></li>
+                            <li><a href="./uvjeti.html" title="Uvjeti korištenja">Uvjeti</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Kontakt</h3>
+                        <ul>
+                            <li><i class="fas fa-map-marker-alt"></i> ${CONFIG.siteInfo.address}</li>
+                            <li><i class="fas fa-phone"></i> <a href="tel:${CONFIG.siteInfo.phone.replace(/\s/g, '')}" title="Nazovite TS-Biro">${CONFIG.siteInfo.phone}</a></li>
+                            <li><i class="fas fa-phone"></i> <a href="tel:+38598376475" title="Alternativni telefon TS-Biro">+385 98 376 475</a></li>
+                            <li><i class="fas fa-envelope"></i> <a href="mailto:${CONFIG.siteInfo.email}" title="Pošaljite email TS-Biro">${CONFIG.siteInfo.email}</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; ${CONFIG.siteInfo.currentYear} ${CONFIG.siteInfo.name}. Sva prava pridržana.</p>
+                    <p><small>TS-Biro d.o.o. - Obrtni sud u Zagrebu, MBS: 123456789, OIB: 12345678901</small></p>
+                </div>
+            </div>
+        `;
+
+        // Add structured data for footer
+        addFooterStructuredData();
+    }
+
+    // Add structured data for footer
+    function addFooterStructuredData() {
+        try {
+            const structuredData = {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                "name": "TS-Biro Knjigovodstvo Sisak",
+                "url": CONFIG.siteInfo.baseUrl,
+                "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": `${CONFIG.siteInfo.baseUrl}/?s={search_term_string}`,
+                    "query-input": "required name=search_term_string"
+                }
+            };
+
+            const script = document.createElement('script');
+            script.type = 'application/ld+json';
+            script.setAttribute('data-footer', 'true');
+            script.textContent = JSON.stringify(structuredData);
+            document.querySelector('footer').appendChild(script);
+        } catch (error) {
+            console.warn('Footer structured data error:', error);
+        }
+    }
+
+    function generateBackToTop() {
+        // Check if back-to-top already exists in HTML
+        let backToTop = document.querySelector('.back-to-top');
+
+        if (!backToTop) {
+            // Create new one if it doesn't exist
+            backToTop = document.createElement('a');
+            backToTop.href = '#';
+            backToTop.id = 'backToTop';
+            backToTop.className = 'back-to-top';
+            backToTop.setAttribute('aria-label', 'Povratak na vrh stranice TS-Biro');
+            backToTop.setAttribute('title', 'Vrati se na vrh stranice');
+            document.body.appendChild(backToTop);
+        }
+
+        // Always ensure the icon is added
+        if (!backToTop.querySelector('i')) {
+            backToTop.innerHTML = '<i class="fas fa-chevron-up" aria-hidden="true"></i>';
+        }
+    }
+
+    // Cookie consent banner
+    function generateCookieConsent() {
+        // Check if cookie consent already exists in HTML
+        let cookieConsent = document.querySelector('#cookieConsent');
+
+        if (!cookieConsent) {
+            // Create new one if it doesn't exist
+            cookieConsent = document.createElement('div');
+            cookieConsent.id = 'cookieConsent';
+            cookieConsent.className = 'cookie-consent';
+            cookieConsent.setAttribute('role', 'dialog');
+            cookieConsent.setAttribute('aria-labelledby', 'cookie-heading');
+            document.body.appendChild(cookieConsent);
+        }
+
+        // Always ensure the content is added (but only if empty)
+        if (!cookieConsent.innerHTML.trim() || cookieConsent.innerHTML.includes('<!-- Dynamic content -->')) {
+            cookieConsent.innerHTML = `
+                <h3 id="cookie-heading">Kolačići na TS-Biro stranici</h3>
+                <p id="cookie-desc">Ova web stranica koristi kolačiće kako bi osigurala najbolje iskustvo na našoj web stranici i poboljšala naše usluge knjigovodstva u Sisku.</p>
+                <div class="cookie-buttons">
+                    <button id="acceptCookies" class="btn btn-small" aria-label="Prihvati kolačiće">
+                        Prihvati sve kolačiće
+                    </button>
+                    <button id="rejectCookies" class="btn btn-small btn-secondary" aria-label="Odbij kolačiće">
+                        Odbij nepotrebne kolačiće
+                    </button>
+                    <p class="cookie-info">
+                        <a href="./privatnost.html" title="Politika privatnosti TS-Biro" class="cookie-info-link">
+                            <i class="fas fa-info-circle" aria-hidden="true"></i> Saznajte više o kolačićima</a>
+                    </p>
+                </div>
+        `;
+        }
+    }
+
+    // Generate common elements
+    function generateCommonElements() {
+        try {
+            // Skip link for accessibility
+            if (!document.querySelector('.skip-link')) {
+                const skipLink = document.createElement('a');
+                skipLink.href = '#main-content';
+                skipLink.className = 'skip-link';
+                skipLink.textContent = 'Preskoči na glavni sadržaj';
+                skipLink.setAttribute('aria-label', 'Preskoči navigaciju i idi na glavni sadržaj');
+                document.body.insertBefore(skipLink, document.body.firstChild);
+            }
+
+            // Back to top button
+            generateBackToTop();
+
+            // Cookie consent banner
+            generateCookieConsent();
+
+            // Add viewport meta tag if missing
+            if (!document.querySelector('meta[name="viewport"]')) {
+                const viewport = document.createElement('meta');
+                viewport.name = 'viewport';
+                viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=5.0';
+                document.head.appendChild(viewport);
+            }
+        } catch (error) {
+            console.warn('Common elements generation error:', error);
+        }
+    }
+
+    // Initialize Google Analytics GA4
+    function initializeGoogleAnalyticsGA4() {
+        if (!CONFIG.analytics.enabled) return;
+
+        try {
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () {
+                window.dataLayer.push(arguments);
+            };
+            window.gtag('js', new Date());
+
+            window.gtag('config', CONFIG.analytics.trackingId, {
+                page_title: document.title,
+                page_location: window.location.href,
+                page_path: window.location.pathname,
+                send_page_view: true
             });
 
-            // Close menu when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('.header-container') && navMenu.classList.contains('active')) {
-                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
-                    navMenu.classList.remove('active');
-                    mobileMenuBtn.querySelector('i').className = 'fa-solid fa-bars';
+            const script = document.createElement('script');
+            script.async = true;
+            script.src = `https://www.googletagmanager.com/gtag/js?id=${CONFIG.analytics.trackingId}`;
+            script.onload = () => {
+                trackEvent('analytics_loaded', { type: 'ga4' });
+            };
+            document.head.appendChild(script);
+        } catch (error) {
+            console.warn('Google Analytics initialization error:', error);
+        }
+    }
+
+    // Service Worker Registration
+    function initializeServiceWorker() {
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                try {
+                    navigator.serviceWorker.register('./js/service-worker.js', {
+                        scope: './js/'
+                    })
+                        .then(function (registration) {
+
+                            // Check for updates
+                            registration.addEventListener('updatefound', () => {
+                                const newWorker = registration.installing;
+
+                                newWorker.addEventListener('statechange', () => {
+                                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    }
+                                });
+                            });
+
+                            if (window.TSBiro && window.TSBiro.trackEvent) {
+                                window.TSBiro.trackEvent('pwa', 'service_worker_registered');
+                            }
+                        })
+                        .catch(function (error) {
+                            console.warn('ServiceWorker registration failed:', error);
+                            if (window.TSBiro && window.TSBiro.trackEvent) {
+                                window.TSBiro.trackEvent('pwa', 'service_worker_failed', error.message);
+                            }
+                        });
+                } catch (error) {
+                    console.warn('ServiceWorker error:', error);
                 }
             });
         }
     }
 
-    // 2. FAQ
-    function initializeFAQ() {
-        const faqQuestions = document.querySelectorAll('.faq-question');
+    // Track events for analytics
+    function trackEvent(eventName, eventParams = {}) {
+        if (!CONFIG.analytics.enabled) return;
 
-        faqQuestions.forEach(question => {
-            question.addEventListener('click', function () {
-                const isExpanded = this.getAttribute('aria-expanded') === 'true';
-                const answer = this.nextElementSibling;
-                const icon = this.querySelector('.faq-icon');
-
-                this.setAttribute('aria-expanded', !isExpanded);
-                answer.classList.toggle('active');
-
-                if (icon) {
-                    icon.textContent = isExpanded ? '+' : '−';
-                }
-
-                // Track FAQ interaction
-                trackEvent('content', 'faq_toggle', this.textContent.trim(), isExpanded ? 0 : 1);
-            });
-        });
-    }
-
-    // 3. TESTIMONIALS SLIDER
-    function initializeTestimonialCarousel() {
-        const testimonialsContainer = document.querySelector('.testimonials-container');
-        if (!testimonialsContainer) {
-            console.log('Testimonials container not found');
-            return;
-        }
-
-        const testimonials = document.querySelectorAll('.testimonial');
-        const prevBtn = document.querySelector('.testimonial-prev');
-        const nextBtn = document.querySelector('.testimonial-next');
-        const dots = document.querySelectorAll('.testimonial-dot');
-
-        console.log('Found testimonials:', testimonials.length);
-        console.log('Found prev button:', !!prevBtn);
-        console.log('Found next button:', !!nextBtn);
-        console.log('Found dots:', dots.length);
-
-        if (testimonials.length === 0) {
-            console.log('No testimonials found');
-            return;
-        }
-
-        let currentIndex = 0;
-        let autoPlayInterval;
-
-        function showTestimonial(index) {
-            console.log('Showing testimonial:', index);
-
-            // Hide all testimonials
-            testimonials.forEach(testimonial => {
-                testimonial.classList.remove('active');
-            });
-
-            // Remove active class from all dots
-            dots.forEach(dot => {
-                dot.classList.remove('active');
-            });
-
-            // Show selected testimonial
-            if (testimonials[index]) {
-                testimonials[index].classList.add('active');
-            }
-
-            // Activate corresponding dot
-            if (dots[index]) {
-                dots[index].classList.add('active');
-            }
-
-            currentIndex = index;
-            updateButtonStates();
-        }
-
-        function updateButtonStates() {
-            if (prevBtn) {
-                prevBtn.disabled = currentIndex === 0;
-                prevBtn.style.opacity = currentIndex === 0 ? '0.5' : '1';
-            }
-
-            if (nextBtn) {
-                nextBtn.disabled = currentIndex === testimonials.length - 1;
-                nextBtn.style.opacity = currentIndex === testimonials.length - 1 ? '0.5' : '1';
-            }
-        }
-
-        function nextTestimonial() {
-            const nextIndex = currentIndex === testimonials.length - 1 ? 0 : currentIndex + 1;
-            showTestimonial(nextIndex);
-            trackEvent('content', 'testimonial_next', nextIndex);
-        }
-
-        function prevTestimonial() {
-            const prevIndex = currentIndex === 0 ? testimonials.length - 1 : currentIndex - 1;
-            showTestimonial(prevIndex);
-            trackEvent('content', 'testimonial_prev', prevIndex);
-        }
-
-        function startAutoPlay() {
-            if (!autoPlayInterval) {
-                autoPlayInterval = setInterval(nextTestimonial, 5000);
-                console.log('Auto-play started');
-            }
-        }
-
-        function stopAutoPlay() {
-            if (autoPlayInterval) {
-                clearInterval(autoPlayInterval);
-                autoPlayInterval = null;
-                console.log('Auto-play stopped');
-            }
-        }
-
-        // Event listeners for navigation buttons
-        if (prevBtn) {
-            prevBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                console.log('Previous button clicked');
-                stopAutoPlay();
-                prevTestimonial();
-                startAutoPlay();
-            });
-        }
-
-        if (nextBtn) {
-            nextBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                console.log('Next button clicked');
-                stopAutoPlay();
-                nextTestimonial();
-                startAutoPlay();
-            });
-        }
-
-        // Event listeners for dots
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', (e) => {
-                e.preventDefault();
-                console.log('Dot clicked:', index);
-                stopAutoPlay();
-                showTestimonial(index);
-                trackEvent('content', 'testimonial_dot_click', index);
-                startAutoPlay();
-            });
-        });
-
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            const activeTestimonial = testimonialsContainer.querySelector('.testimonial.active');
-            if (activeTestimonial && document.activeElement.closest('.testimonials-container')) {
-                if (e.key === 'ArrowLeft') {
-                    e.preventDefault();
-                    stopAutoPlay();
-                    prevTestimonial();
-                    startAutoPlay();
-                } else if (e.key === 'ArrowRight') {
-                    e.preventDefault();
-                    stopAutoPlay();
-                    nextTestimonial();
-                    startAutoPlay();
-                }
-            }
-        });
-
-        // Pause auto-play on hover
-        testimonialsContainer.addEventListener('mouseenter', stopAutoPlay);
-        testimonialsContainer.addEventListener('mouseleave', startAutoPlay);
-
-        // Touch swipe support for mobile
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        testimonialsContainer.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-        }, { passive: true });
-
-        testimonialsContainer.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-        }, { passive: false });
-
-        testimonialsContainer.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        });
-
-        function handleSwipe() {
-            const swipeThreshold = 50;
-            const swipeDistance = touchEndX - touchStartX;
-
-            if (Math.abs(swipeDistance) > swipeThreshold) {
-                if (swipeDistance > 0) {
-                    // Swipe right - previous
-                    stopAutoPlay();
-                    prevTestimonial();
-                    startAutoPlay();
-                } else {
-                    // Swipe left - next
-                    stopAutoPlay();
-                    nextTestimonial();
-                    startAutoPlay();
-                }
-            }
-        }
-
-        // Initialize
-        console.log('Initializing testimonials slider');
-        showTestimonial(0);
-        startAutoPlay();
-    }
-
-    // 4. HERO SLIDER
-    function initializeHeroSlider() {
-        const heroSlider = document.querySelector('.hero-slider');
-        if (!heroSlider) return;
-
-        const heroSlides = document.querySelectorAll('.hero-slide');
-        const prevButton = document.querySelector('.slider-prev');
-        const nextButton = document.querySelector('.slider-next');
-        const dots = document.querySelectorAll('.slider-dot');
-
-        if (heroSlides.length === 0) return;
-
-        let currentSlide = 0;
-        let heroAutoPlayInterval;
-
-        function showSlide(index) {
-            heroSlides.forEach(slide => slide.classList.remove('active'));
-            dots.forEach(dot => dot.classList.remove('active'));
-
-            if (heroSlides[index]) heroSlides[index].classList.add('active');
-            if (dots[index]) dots[index].classList.add('active');
-
-            currentSlide = index;
-        }
-
-        function nextSlide() {
-            const nextIndex = currentSlide === heroSlides.length - 1 ? 0 : currentSlide + 1;
-            showSlide(nextIndex);
-        }
-
-        function prevSlide() {
-            const prevIndex = currentSlide === 0 ? heroSlides.length - 1 : currentSlide - 1;
-            showSlide(prevIndex);
-        }
-
-        function startHeroAutoPlay() {
-            if (!heroAutoPlayInterval) {
-                heroAutoPlayInterval = setInterval(nextSlide, 6000);
-            }
-        }
-
-        function stopHeroAutoPlay() {
-            if (heroAutoPlayInterval) {
-                clearInterval(heroAutoPlayInterval);
-                heroAutoPlayInterval = null;
-            }
-        }
-
-        // Event listeners
-        if (prevButton) prevButton.addEventListener('click', () => { stopHeroAutoPlay(); prevSlide(); startHeroAutoPlay(); });
-        if (nextButton) nextButton.addEventListener('click', () => { stopHeroAutoPlay(); nextSlide(); startHeroAutoPlay(); });
-
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => { stopHeroAutoPlay(); showSlide(index); startHeroAutoPlay(); });
-        });
-
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') { e.preventDefault(); stopHeroAutoPlay(); prevSlide(); startHeroAutoPlay(); }
-            else if (e.key === 'ArrowRight') { e.preventDefault(); stopHeroAutoPlay(); nextSlide(); startHeroAutoPlay(); }
-        });
-
-        // Pause on hover
-        heroSlider.addEventListener('mouseenter', stopHeroAutoPlay);
-        heroSlider.addEventListener('mouseleave', startHeroAutoPlay);
-
-        // Start auto-play
-        startHeroAutoPlay();
-    }
-
-    // 5. KONTAKT FORME (UKLJUČUJUĆI CHECKBOX VALIDACIJU)
-    function initializeContactForms() {
-        const contactForms = document.querySelectorAll('form');
-
-        contactForms.forEach(form => {
-            // Add real-time validation
-            const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
-            inputs.forEach(input => {
-                input.addEventListener('blur', () => validateFormField(input));
-                input.addEventListener('input', () => {
-                    if (input.validity.valid) clearFieldError(input);
+        try {
+            if (window.gtag) {
+                window.gtag('event', eventName, {
+                    ...eventParams,
+                    send_to: CONFIG.analytics.trackingId,
+                    page_title: document.title,
+                    page_location: window.location.href
                 });
+            }
+
+            if (window.dataLayer) {
+                window.dataLayer.push({
+                    'event': eventName,
+                    ...eventParams,
+                    'page_title': document.title,
+                    'page_location': window.location.href,
+                    'timestamp': new Date().toISOString()
+                });
+            }
+        } catch (error) {
+            console.warn('Event tracking error:', error);
+        }
+    }
+
+    // Notification system
+    function showNotification(message, type = 'info', duration = 5000) {
+        try {
+            // Remove existing notifications
+            document.querySelectorAll('.notification').forEach(notification => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
             });
 
-            // Handle checkbox interactions
-            const checkboxes = form.querySelectorAll('input[type="checkbox"]');
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', function () {
-                    const checkboxItem = this.closest('.checkbox-item');
-                    if (checkboxItem) {
-                        if (this.checked) {
-                            checkboxItem.classList.add('checked');
-                            trackEvent('form', 'checkbox_selected', this.value);
-                        } else {
-                            checkboxItem.classList.remove('checked');
-                        }
-                    }
-                });
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.setAttribute('role', 'alert');
+            notification.setAttribute('aria-live', 'polite');
+            notification.setAttribute('aria-atomic', 'true');
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <span>${message}</span>
+                    <button class="notification-close" aria-label="Zatvori obavijest" title="Zatvori">
+                        <i class="fas fa-times" aria-hidden="true"></i>
+                    </button>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+
+            // Add entrance animation
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+
+            // Close button
+            notification.querySelector('.notification-close').addEventListener('click', () => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
             });
 
-            // Form submission
-            form.addEventListener('submit', function (e) {
-                e.preventDefault();
-
-                const formData = new FormData(this);
-                const name = formData.get('name');
-                const email = formData.get('email');
-                const message = formData.get('message');
-
-                // Validate all required fields
-                let isValid = true;
-                inputs.forEach(input => {
-                    if (!validateFormField(input)) isValid = false;
-                });
-
-                if (!isValid) {
-                    showNotification('Molimo ispunite sva obavezna polja ispravno.', 'error');
-                    trackEvent('form', 'validation_error', 'contact_form');
-                    return;
-                }
-
-                // Email validation
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(email)) {
-                    showNotification('Molimo unesite ispravnu email adresu.', 'error');
-                    trackEvent('form', 'email_validation_error', email);
-                    return;
-                }
-
-                // Handle checkbox values - DODANO ZA CHECKBOXOVE
-                const additionalServices = getCheckboxValues('additionalServices[]');
-                if (additionalServices.length > 0) {
-                    formData.append('additionalServices', additionalServices.join(', '));
-                    trackEvent('form', 'additional_services_selected', additionalServices.join(', '));
-                }
-
-                // Show loading state
-                const submitBtn = form.querySelector('button[type="submit"]');
-                const originalText = submitBtn.innerHTML;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Slanje...';
-                submitBtn.disabled = true;
-
-                // Simulate form submission (replace with actual AJAX call)
+            // Auto dismiss
+            if (duration > 0) {
                 setTimeout(() => {
-                    // Success
-                    showNotification('Hvala vam na upitu! Kontaktirat ćemo vas u najkraćem mogućem roku.', 'success');
-                    this.reset();
+                    if (notification.parentNode) {
+                        notification.style.animation = 'slideOut 0.3s ease';
+                        setTimeout(() => notification.remove(), 300);
+                    }
+                }, duration);
+            }
 
-                    // Reset checkbox styling
-                    checkboxes.forEach(checkbox => {
-                        const checkboxItem = checkbox.closest('.checkbox-item');
-                        if (checkboxItem) {
-                            checkboxItem.classList.remove('checked');
-                        }
-                    });
-
-                    // Reset button
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-
-                    // Track successful submission
-                    trackEvent('form', 'submit_success', 'contact_form', 1);
-                }, 1500);
+            // Track notification
+            trackEvent('notification_shown', {
+                notification_type: type,
+                notification_message: message.substring(0, 100)
             });
-        });
+        } catch (error) {
+            console.warn('Notification error:', error);
+        }
     }
 
-    // Helper function to get checkbox values - NOVA FUNKCIJA ZA CHECKBOXOVE
+    // Get checkbox values
     function getCheckboxValues(name) {
-        const checkboxes = document.querySelectorAll(`input[name="${name}"]:checked`);
-        return Array.from(checkboxes).map(cb => cb.value);
+        try {
+            const checkboxes = document.querySelectorAll(`input[name="${name}"]:checked`);
+            return Array.from(checkboxes).map(cb => cb.value);
+        } catch (error) {
+            console.warn('Checkbox values error:', error);
+            return [];
+        }
     }
 
     // Form validation helper
     function validateFormField(field) {
-        clearFieldError(field);
+        if (window.TSBiroForms && window.TSBiroForms.validateFormField) {
+            return window.TSBiroForms.validateFormField(field);
+        }
 
-        if (!field.validity.valid) {
-            showFieldError(field, getValidationMessage(field));
+        // Basic validation
+        if (!field.value.trim() && field.required) {
+            field.classList.add('error');
             return false;
         }
 
-        // Additional email validation
-        if (field.type === 'email' && field.value) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(field.value)) {
-                showFieldError(field, 'Molimo unesite ispravnu email adresu.');
-                return false;
-            }
-        }
-
+        field.classList.remove('error');
         return true;
     }
 
-    function showFieldError(field, message) {
-        field.classList.add('error');
-        let errorElement = field.parentNode.querySelector('.field-error');
-        if (!errorElement) {
-            errorElement = document.createElement('div');
-            errorElement.className = 'field-error';
-            field.parentNode.appendChild(errorElement);
-        }
-        errorElement.textContent = message;
-    }
+    // Optimize headings for SEO
+    function optimizeHeadings() {
+        try {
+            // Ensure proper heading hierarchy
+            const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+            let lastLevel = 0;
 
-    function clearFieldError(field) {
-        field.classList.remove('error');
-        const errorElement = field.parentNode.querySelector('.field-error');
-        if (errorElement) errorElement.remove();
-    }
+            headings.forEach((heading, index) => {
+                const level = parseInt(heading.tagName.charAt(1));
 
-    function getValidationMessage(field) {
-        if (field.validity.valueMissing) return 'Ovo polje je obavezno.';
-        if (field.validity.typeMismatch && field.type === 'email') return 'Molimo unesite ispravnu email adresu.';
-        return 'Unos nije ispravan.';
-    }
-
-    // 6. SMOOTH SCROLLING
-    function initializeSmoothScrolling() {
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    const headerHeight = document.querySelector('header').offsetHeight;
-                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
-
-                    // Update URL without page reload
-                    history.pushState(null, null, targetId);
-
-                    // Track anchor click
-                    trackEvent('navigation', 'anchor_click', targetId);
+                // Add ID if missing for anchor links
+                if (!heading.id) {
+                    const text = heading.textContent
+                        .toLowerCase()
+                        .replace(/[^\w\s-]/g, '')
+                        .replace(/\s+/g, '-')
+                        .replace(/-+/g, '-')
+                        .trim();
+                    heading.id = `heading-${text}-${index}`;
                 }
+
+                // Track heading structure
+                if (level > lastLevel + 1) {
+                    console.warn('Heading hierarchy jump detected:', heading.textContent);
+                }
+                lastLevel = level;
             });
-        });
+        } catch (error) {
+            console.warn('Headings optimization error:', error);
+        }
     }
 
-    // 7. BACK TO TOP
-    function initializeBackToTop() {
-        const backToTopButton = document.querySelector('.back-to-top');
-        if (!backToTopButton) return;
+    // Main initialization
+    async function init() {
+        try {
 
-        window.addEventListener('scroll', () => {
-            const isVisible = window.pageYOffset > 300;
-            backToTopButton.classList.toggle('visible', isVisible);
+            // Generate page elements
+            generateHeader();
+            generateFooter();
+            generateCommonElements();
+            generateBreadcrumbs();
 
-            // Track scroll depth
-            const scrollPercentage = Math.round((window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100);
-            if (scrollPercentage > 75) {
-                trackEvent('engagement', 'scroll_depth', '75%', scrollPercentage);
-            } else if (scrollPercentage > 50) {
-                trackEvent('engagement', 'scroll_depth', '50%', scrollPercentage);
-            } else if (scrollPercentage > 25) {
-                trackEvent('engagement', 'scroll_depth', '25%', scrollPercentage);
+            // Optimize headings
+            setTimeout(optimizeHeadings, 100);
+
+            // Initialize service worker
+            initializeServiceWorker();
+
+            // Check cookies consent
+            if (localStorage.getItem('cookiesAccepted') === 'true') {
+                CONFIG.analytics.enabled = true;
+                initializeGoogleAnalyticsGA4();
             }
-        });
 
-        backToTopButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            trackEvent('navigation', 'back_to_top_click');
-        });
-    }
-
-    // 8. COOKIE CONSENT
-    function initializeCookieConsent() {
-        const cookieConsent = document.querySelector('.cookie-consent');
-        const acceptCookies = document.querySelector('#acceptCookies');
-        const rejectCookies = document.querySelector('#rejectCookies');
-
-        if (!cookieConsent || localStorage.getItem('cookiesAccepted')) return;
-
-        setTimeout(() => cookieConsent.style.display = 'block', 2000);
-
-        if (acceptCookies) {
-            acceptCookies.addEventListener('click', () => {
-                localStorage.setItem('cookiesAccepted', 'true');
-                cookieConsent.style.display = 'none';
-                showNotification('Hvala vam! Kolačići su prihvaćeni.', 'success');
-                trackEvent('cookies', 'accepted');
-
-                // Enable analytics if accepted
-                if (!CONFIG.analytics.enabled) {
-                    CONFIG.analytics.enabled = true;
-                    initializeGoogleAnalytics();
+            // Load modules
+            const modules = ['main', 'forms', 'seo', 'analytics'];
+            for (const module of modules) {
+                if (CONFIG.modules[module]) {
+                    try {
+                        await loadModule(module);
+                    } catch (error) {
+                        console.warn(`Module ${module} failed to load:`, error);
+                    }
                 }
-            });
-        }
+            }
 
-        if (rejectCookies) {
-            rejectCookies.addEventListener('click', () => {
-                localStorage.setItem('cookiesAccepted', 'false');
-                cookieConsent.style.display = 'none';
-                showNotification('Kolačići su odbijeni. Neke funkcionalnosti stranice možda neće raditi ispravno.', 'info');
-                trackEvent('cookies', 'rejected');
-            });
-        }
-    }
+            // Initialize main module
+            if (window.TSBiroMain && typeof window.TSBiroMain.init === 'function') {
+                window.TSBiroMain.init();
+            }
 
-    // 9. NOTIFICATION SYSTEM
-    function showNotification(message, type = 'info', duration = 5000) {
-        // Remove existing notifications
-        document.querySelectorAll('.notification').forEach(notification => notification.remove());
-
-        const notification = document.createElement('div');
-        notification.className = `notification notification-${type}`;
-        notification.setAttribute('role', 'alert');
-        notification.setAttribute('aria-live', 'polite');
-        notification.innerHTML = `
-            <span>${message}</span>
-            <button class="notification-close" aria-label="Zatvori obavijest">×</button>
-        `;
-
-        document.body.appendChild(notification);
-
-        // Close button
-        notification.querySelector('.notification-close').addEventListener('click', () => {
-            notification.style.animation = 'slideOut 0.3s ease';
-            setTimeout(() => notification.remove(), 300);
-        });
-
-        // Auto-hide
-        if (duration > 0) {
+            // Track page view
             setTimeout(() => {
-                notification.style.animation = 'slideOut 0.3s ease';
-                setTimeout(() => notification.remove(), 300);
-            }, duration);
+                trackEvent('page_view', {
+                    page_title: document.title,
+                    page_location: window.location.href,
+                    page_path: window.location.pathname,
+                    referrer: document.referrer || 'direct'
+                });
+            }, 1000);
+
+        } catch (error) {
+            console.error('TS-Biro initialization error:', error);
+            showNotification('Došlo je do greške pri učitavanju stranice', 'error', 5000);
         }
     }
 
-    // Initialize when DOM is ready
+    // Start when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
-        init();
+        // DOM already loaded
+        setTimeout(init, 0);
     }
 
-    // Export functions for global access (if needed)
+    // Expose global API
     window.TSBiro = {
+        CONFIG,
+        init,
         showNotification,
         trackEvent,
+        getCheckboxValues,
         validateFormField,
-        getCheckboxValues
+        generateHeader,
+        generateFooter,
+        generateBreadcrumbs,
+        optimizeHeadings
     };
 })();

@@ -31,11 +31,9 @@ const EXTERNAL_URLS = [
 ];
 
 self.addEventListener('install', event => {
-    console.log('Service Worker installing...');
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
-                console.log('Caching critical resources');
                 // Cache critical resources
                 return Promise.all(
                     CRITICAL_URLS.map(url => {
@@ -50,13 +48,11 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('activate', event => {
-    console.log('Service Worker activating...');
     event.waitUntil(
         caches.keys().then(cacheNames => {
             return Promise.all(
                 cacheNames.map(cacheName => {
                     if (cacheName !== CACHE_NAME) {
-                        console.log('Deleting old cache:', cacheName);
                         return caches.delete(cacheName);
                     }
                 })
@@ -192,7 +188,6 @@ self.addEventListener('message', event => {
 // Background sync for form submissions
 self.addEventListener('sync', event => {
     if (event.tag === 'sync-forms') {
-        console.log('Background sync for forms');
         event.waitUntil(syncForms());
     }
 });
@@ -233,7 +228,6 @@ self.addEventListener('push', event => {
 });
 
 self.addEventListener('notificationclick', event => {
-    console.log('Notification click received.', event.notification.data);
     event.notification.close();
 
     event.waitUntil(

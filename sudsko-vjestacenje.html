@@ -12,14 +12,15 @@
     <title>Financijska vještačenja Sisak | Sudska i privatna vještačenja - TS-Biro</title>
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://www.ts-biro.hr/sudsko-vjestacenje">
+    <link rel="canonical" href="https://www.ts-biro.hr/sudsko-vjestacenje.html">
 
     <!-- Open Graph & Twitter tags -->
     <meta property="og:title" content="Financijska vještačenja Sisak | Sudska i privatna vještačenja">
     <meta property="og:description"
         content="Stručna financijska i računovodstvena vještačenja za sudske postupke. Nepristrano, diskretno, brzi rokovi.">
     <meta property="og:image" content="https://www.ts-biro.hr/images/services/forensic-accounting.jpg">
-    <meta property="og:url" content="https://www.ts-biro.hr/sudsko-vjestacenje">
+    <meta property="og:image:alt" content="Financijska i računovodstvena vještačenja TS-Biro Sisak">
+    <meta property="og:url" content="https://www.ts-biro.hr/sudsko-vjestacenje.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="TS-Biro">
     <meta property="og:locale" content="hr_HR">
@@ -50,9 +51,8 @@
     <!-- Load Non-Critical CSS Asynchronously -->
     <link rel="stylesheet" href="css/non-critical.css" media="print" onload="this.media='all'">
 
-    <!-- JavaScript in head with defer -->
+    <!-- JavaScript Modules -->
     <script src="js/script.js" defer></script>
-    <script src="js/service-worker.js" defer></script>
 
     <!-- Structured Data for Service -->
     <script type="application/ld+json">
@@ -116,69 +116,37 @@
     }
     </script>
 
-    <!-- FAQ Schema for this service -->
+    <!-- Local Business Structured Data -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "Koliko traje izrada vještačenja?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Ovisi o opsegu i kompleksnosti predmeta. Prije početka rada uvijek damo procijenjeni rok koji se kreće od nekoliko dana do nekoliko tjedana, ovisno o količini dokumentacije i složenosti analize."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Možete li raditi vještačenja za sudske postupke?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Da — imamo iskustvo i u sudskim i u privatnim predmetima. Naš vještak je stalni sudski vještak za financije s više godina iskustva u sudskim postupcima."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Koliko košta vještačenje?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Cijena ovisi o opsegu posla. Prije početka rada dajemo detaljnu ponudu s procijenjenim satnicama ili paušalnom cijenom za cijeli posao. Uvijek možete dobiti besplatnu procjenu prije donošenja odluke."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Možete li dati stručno mišljenje i bez sudskog postupka?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Naravno — radimo i privatna vještačenja za potrebe pregovora, revizija ili sporova izvan suda. Često klijenti žele samo preliminarno mišljenje prije donošenja odluke o pokretanju postupka."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Kako izgleda gotov nalaz vještačenja?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Dobivate jasan, strukturiran i profesionalan dokument koji je razumljiv i nestručnim osobama. Dokument uključuje opis slučaja, korištene metode, analizu, zaključke i stručno mišljenje."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Jesu li informacije u potpunosti povjerljive?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Da — odnosimo se prema dokumentima i informacijama s najvećom mogućom diskrecijom. Svi podaci su zaštićeni i ne dijele se s trećim stranama bez vašeg odobrenja."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Možete li izraditi vještačenje za fizičke osobe?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Da — izrađujemo financijska vještačenja za fizičke osobe u razvodnim postupcima, nasljednim sporovima, naknadama štete i drugim postupcima gdje je potrebno financijsko stručno mišljenje."
-                }
+        "@type": "LocalBusiness",
+        "name": "TS-Biro Sudsko Vještačenje Sisak",
+        "description": "Financijska i računovodstvena vještačenja u Sisku za sudske postupke i privatne potrebe.",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Ferde Livadića 29",
+            "addressLocality": "Sisak",
+            "postalCode": "44000",
+            "addressCountry": "HR"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 45.4852,
+            "longitude": 16.3764
+        },
+        "openingHours": "Mo-Fr 08:00-16:00",
+        "areaServed": {
+            "@type": "City",
+            "name": "Sisak"
+        },
+        "makesOffer": {
+            "@type": "Offer",
+            "itemOffered": {
+                "@type": "Service",
+                "name": "Sudsko vještačenje u Sisku"
             }
-        ]
+        }
     }
     </script>
 </head>
@@ -187,63 +155,20 @@
     <!-- Skip to main content for accessibility -->
     <a href="#main-content" class="skip-link">Preskoči na glavni sadržaj</a>
 
-    <!-- Header & Navigation -->
+    <!-- Header & Navigation (generated by script.js) -->
     <header>
-        <div class="container">
-            <div class="header-container">
-                <a href="./" class="logo" aria-label="TS-Biro - Početna stranica">
-                    <img src="images/TS-Biro-Circle-logo.svg" width="128" height="50"
-                        alt="TS-Biro Logo - Obiteljska računovodstvena tvrtka | Sudska vještačenja Sisak"
-                        title="TS-Biro - Stručna financijska vještačenja" loading="eager" decoding="async"
-                        fetchpriority="high" itemprop="logo" class="logo-img">
-                </a>
-                <nav aria-label="Glavna navigacija">
-                    <button class="mobile-menu-btn" aria-expanded="false" aria-controls="primary-navigation"
-                        aria-label="Toggle navigation menu">
-                        <span class="sr-only">Meni</span>
-                        <i class="fa-solid fa-bars" aria-hidden="true"></i>
-                    </button>
-                    <ul class="nav-menu" id="primary-navigation">
-                        <li class="nav-item"><a href="./" class="nav-link">Početna</a></li>
-                        <li class="nav-item"><a href="./#usluge" class="nav-link">Usluge</a></li>
-                        <li class="nav-item"><a href="./#onama" class="nav-link">O nama</a></li>
-                        <li class="nav-item"><a href="./#klijenti" class="nav-link">Klijenti</a></li>
-                        <li class="nav-item"><a href="./#kontakt" class="nav-link">Kontakt</a></li>
-                        <li class="nav-item"><a href="./knjigovodstvo-racunovodstvo.html"
-                                class="nav-link">Računovodstvo</a></li>
-                        <li class="nav-item"><a href="./place-kadrovska-evidencija.html" class="nav-link">Plaće</a></li>
-                        <li class="nav-item"><a href="./financijsko-poslovno-savjetovanje.html"
-                                class="nav-link">Savjetovanje</a></li>
-                        <li class="nav-item"><a href="./sudsko-vjestacenje.html" class="nav-link active">Vještačenje</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
+        <!-- Dynamic content -->
     </header>
 
-    <!-- Breadcrumb Navigation -->
-    <nav class="breadcrumbs">
+    <!-- Breadcrumb Navigation (generated by script.js) -->
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
         <div class="container">
-            <ol class="breadcrumb-nav" aria-label="Breadcrumb">
-                <li class="breadcrumb-item">
-                    <a href="/" class="breadcrumb-link">
-                        <i class="fas fa-home"></i>
-                        <span>Početna</span>
-                    </a>
-                </li>
-                <li class="breadcrumb-item">
-                    <span class="breadcrumb-current">
-                        <i class="fas fa-hammer"></i>
-                        <span>Vještačenje</span>
-                    </span>
-                </li>
-            </ol>
+            <!-- Dynamic content -->
         </div>
     </nav>
 
     <!-- Service Hero Section -->
-    <section class="service-hero">
+    <section class="hero">
         <div class="container">
             <div class="hero-content">
                 <h1>Financijska i računovodstvena vještačenja u Sisku</h1>
@@ -258,46 +183,50 @@
             </div>
         </div>
     </section>
-    <section class="intro-section">
-        <div class="container">
-            <div class="intro-content">
-                <div class="intro-text">
-                    <h2>Vjerodostojna vještačenja za sud i privatne potrebe</h2>
-                    <p>Kao <strong>stalni sudski vještak za financije</strong>, izrađujemo stručna, nepristrana i detaljna vještačenja
-                        koja su ključna za ishod sudskih postupaka i poslovnih sporova.</p>
-
-                    <div class="intro-highlights">
-                        <div class="highlight-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Nepristrana i objektivna analiza</span>
-                        </div>
-                        <div class="highlight-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Stroga diskrecija i povjerljivost</span>
-                        </div>
-                        <div class="highlight-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Brzi rokovi izrade</span>
-                        </div>
-                        <div class="highlight-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Podrška u sudskim postupcima</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="intro-image">
-                    <picture>
-                        <source srcset="images/services/expertise-intro.webp" type="image/webp">
-                        <img src="images/services/expertise-intro.jpg" alt="Financijska i računovodstvena vještačenja TS-Biro Sisak"
-                            loading="lazy" decoding="async">
-                    </picture>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Main Content -->
     <main id="main-content">
+        <section class="intro-section">
+            <div class="container">
+                <div class="intro-content">
+                    <div class="intro-text">
+                        <h2>Vjerodostojna vještačenja za sud i privatne potrebe</h2>
+                        <p>Kao <strong>stalni sudski vještak za financije</strong>, izrađujemo stručna, nepristrana i
+                            detaljna
+                            vještačenja
+                            koja su ključna za ishod sudskih postupaka i poslovnih sporova.</p>
+
+                        <div class="intro-highlights">
+                            <div class="highlight-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Nepristrana i objektivna analiza</span>
+                            </div>
+                            <div class="highlight-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Stroga diskrecija i povjerljivost</span>
+                            </div>
+                            <div class="highlight-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Brzi rokovi izrade</span>
+                            </div>
+                            <div class="highlight-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Podrška u sudskim postupcima</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="intro-image">
+                        <picture>
+                            <source srcset="images/services/expertise-intro.webp" type="image/webp">
+                            <img src="images/services/expertise-intro.jpg" width="600" height="400"
+                                alt="Financijska i računovodstvena vještačenja TS-Biro Sisak - stručna vještačenja za sudove"
+                                loading="lazy" decoding="async">
+                        </picture>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Service Details -->
         <section class="section">
             <div class="container">
@@ -351,7 +280,7 @@
                         </div>
                         <div class="benefit-item">
                             <h4>Poštivanje rokova i diskrecija</h4>
-                            <p>Poštujemo dogovorene rokove. Svi podaci su strogo povjerljivi i zaštićeni.</p>
+                            <p>Poštujemo dogovorene rokova. Svi podaci su strogo povjerljivi i zaštićeni.</p>
                         </div>
                     </div>
                 </div>
@@ -635,79 +564,20 @@
         </section>
     </main>
 
-    <!-- Footer -->
+    <!-- Footer (generated by script.js) -->
     <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <div class="logo" itemscope itemtype="https://schema.org/AccountingService">
-                        <img src="images/TS-Biro-Circle-logo.svg" width="255" height="100"
-                            alt="TS-Biro Logo - Obiteljska računovodstvena tvrtka | Knjigovodstvo, računovodstvo i financijsko savjetovanje"
-                            title="TS-Biro - Profesionalno računovodstvo Sisak" loading="lazy" decoding="async"
-                            itemprop="logo" class="logo-img">
-                    </div>
-                    <p>Tvoja sigurnost. Tvoj servis. Tvoje savjetništvo.</p>
-                    <div class="social-links">
-                        <a href="#" aria-label="Pratite nas na Facebooku"><i class="fab fa-facebook-f"
-                                aria-hidden="true"></i></a>
-                        <a href="#" aria-label="Pratite nas na LinkedInu"><i class="fab fa-linkedin-in"
-                                aria-hidden="true"></i></a>
-                        <a href="#" aria-label="Pratite nas na Instagramu"><i class="fab fa-instagram"
-                                aria-hidden="true"></i></a>
-                    </div>
-                </div>
-                <div class="footer-section">
-                    <h4>Usluge</h4>
-                    <ul>
-                        <li><a href="./knjigovodstvo-racunovodstvo.html">Računovodstvo</a></li>
-                        <li><a href="./place-kadrovska-evidencija.html">Plaće</a></li>
-                        <li><a href="./financijsko-poslovno-savjetovanje.html">Savjetovanje</a></li>
-                        <li><a href="./sudsko-vjestacenje.html">Vještačenje</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Linkovi</h4>
-                    <ul>
-                        <li><a href="./#onama">O nama</a></li>
-                        <li><a href="./#klijenti">Klijenti</a></li>
-                        <li><a href="./#kontakt">Kontakt</a></li>
-                        <li><a href="./privatnost.html">Privatnost</a></li>
-                        <li><a href="./uvjeti.html">Uvjeti</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Kontakt</h4>
-                    <ul>
-                        <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Ferde Livadića 29, Sisak</li>
-                        <li><i class="fas fa-phone" aria-hidden="true"></i> <a href="tel:+385915212770">+385 91 521 2770</a>
-                        </li>
-                        <li><i class="fas fa-phone" aria-hidden="true"></i><a href="tel:+38598376475">+385 98 376 475</a>
-                        </li>
-                        <li><i class="fas fa-envelope" aria-hidden="true"></i> <a
-                                href="mailto:info@ts-biro.hr">info@ts-biro.hr</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 TS-Biro. Sva prava pridržana.</p>
-            </div>
-        </div>
+        <!-- Dynamic content -->
     </footer>
-    <!-- Back to Top Button -->
+
+    <!-- Back to Top Button (generated by script.js) -->
     <a href="#" id="backToTop" class="back-to-top" aria-label="Povratak na vrh stranice">
-        <i class="fas fa-chevron-up" aria-hidden="true"></i>
+        <!-- Dynamic content -->
     </a>
-    <!-- Cookie Consent Banner -->
+
+    <!-- Cookie Consent Banner (generated by script.js) -->
     <div id="cookieConsent" class="cookie-consent" role="dialog" aria-labelledby="cookie-heading"
         aria-describedby="cookie-desc">
-        <div class="cookie-content">
-            <p id="cookie-desc">Ova web stranica koristi kolačiće kako bi osigurala najbolje iskustvo na našoj web
-                stranici.</p>
-            <div class="cookie-buttons">
-                <button id="acceptCookies" class="btn btn-small">Prihvati</button>
-                <button id="rejectCookies" class="btn btn-small btn-secondary">Odbij</button>
-            </div>
-        </div>
+        <!-- Dynamic content -->
     </div>
 </body>
 
