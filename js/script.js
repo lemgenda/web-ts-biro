@@ -88,11 +88,6 @@
 
         const navItems = [
             {
-                text: 'Usluge',
-                href: isHomePage ? '#usluge' : './#usluge',
-                title: 'Računovodstvene usluge TS-Biro Sisak'
-            },
-            {
                 text: 'O nama',
                 href: isHomePage ? '#onama' : './#onama',
                 title: 'O nama - TS-Biro računovodstvena tvrtka Sisak'
