@@ -224,7 +224,6 @@ header {
 /* Breadcrumbs styling - add to critical.css */
 .breadcrumbs {
     padding: 0.5rem 0;
-    margin-bottom: 1.5rem;
     background-color: var(--light);
     border-radius: var(--border-radius);
 }
