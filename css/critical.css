@@ -10,6 +10,53 @@
     --border-radius: 8px;
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     --transition: all 0.3s ease;
+    --primary-light: #003a38;
+    --secondary-light: #d8ca6b;
+    --accent: #FF9800;
+    --accent-dark: #e68900;
+    --accent-light: #ffad33;
+    --gray: #6c757d;
+    --border-radius-sm: 4px;
+    --border-radius-lg: 12px;
+    --shadow-md: 0 8px 15px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+    --transition-fast: all 0.15s ease;
+    --transition-slow: all 0.5s ease;
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-xxl: 3rem;
+    --gradient-primary: linear-gradient(135deg, #002625 0%, #003a38 50%, #001716 100%);
+    --gradient-secondary: linear-gradient(135deg, #002625 0%, #1a4a48 100%);
+    --gradient-dark: linear-gradient(135deg, #001716 0%, #002625 100%);
+    --gradient-gold: linear-gradient(135deg, #DAA520 0%, #FFD700 50%, #DAA520 100%);
+}
+
+/* Font faces - KRITIČNO za FOUT/FOIT */
+@font-face {
+    font-family: 'Domine Variable';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 100 900;
+    src: url('../fonts/Domine-VariableFont_wght.ttf') format('truetype-variations');
+}
+
+@font-face {
+    font-family: 'Figtree Variable';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 100 900;
+    src: url('../fonts/Figtree-VariableFont_wght.ttf') format('truetype-variations');
+}
+
+@font-face {
+    font-family: 'Figtree Variable';
+    font-style: italic;
+    font-display: swap;
+    font-weight: 100 900;
+    src: url('../fonts/Figtree-Italic-VariableFont_wght.ttf') format('truetype-variations');
 }
 
 * {
@@ -32,6 +79,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+/* Container */
 .container {
     width: 100%;
     max-width: 1200px;
@@ -39,51 +87,7 @@ body {
     padding: 0 1rem;
 }
 
-/* Breadcrumb navigation */
-.breadcrumb {
-    background-color: var(--light);
-    padding: 0.75rem 0;
-    margin-bottom: 2rem;
-    border-bottom: 1px solid var(--light-gray);
-}
-
-.breadcrumb ol {
-    display: flex;
-    list-style: none;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin: 0;
-    padding: 0;
-}
-
-.breadcrumb li {
-    display: flex;
-    align-items: center;
-}
-
-.breadcrumb li:not(:last-child)::after {
-    content: '›';
-    margin-left: 0.5rem;
-    color: var(--gray);
-}
-
-.breadcrumb a {
-    color: var(--primary);
-    text-decoration: none;
-    font-size: 0.9rem;
-}
-
-.breadcrumb a:hover {
-    text-decoration: underline;
-    color: var(--primary-dark);
-}
-
-.breadcrumb span {
-    color: var(--gray);
-    font-size: 0.9rem;
-}
-
-/* Critical header */
+/* Header - kritično za FCP */
 header {
     background-color: var(--white);
     box-shadow: var(--shadow);
@@ -105,7 +109,7 @@ header {
     transition: var(--transition);
 }
 
-/* Critical hero section */
+/* Hero Section - najvažnije za LCP */
 .hero {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     color: var(--white);
@@ -116,13 +120,25 @@ header {
     min-height: 400px;
     display: flex;
     align-items: center;
+    isolation: isolate;
+    /* Fix stacking context */
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
 }
 
 .hero-content {
     max-width: 800px;
     margin: 0 auto;
     position: relative;
-    z-index: 1;
+    z-index: 2;
 }
 
 .hero h1 {
@@ -147,7 +163,7 @@ header {
     flex-wrap: wrap;
 }
 
-/* Critical buttons */
+/* Basic buttons - kritično za CTA */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -185,9 +201,56 @@ header {
     color: var(--dark);
 }
 
-/* Service page hero */
+/* Navigation - kritično za korisničko iskustvo */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    width: 44px;
+    height: 44px;
+    color: var(--primary);
+    font-size: 1.5rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 0.75rem;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.nav-link {
+    font-family: inherit;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    color: var(--dark);
+    position: relative;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.nav-link:hover,
+.nav-link:focus {
+    background-color: var(--light);
+    text-decoration: none;
+    color: var(--primary);
+}
+
+.nav-link.active {
+    color: var(--primary-dark);
+    font-weight: 600;
+    background-color: var(--light-gray);
+}
+
+/* Service page hero - vidljiv odmah */
 .service-hero {
-    background: linear-gradient(135deg, #002625cc 0%, #001716cc 100%), url('../images/services/service-bg.jpg');
+    background: linear-gradient(135deg, #002625cc 0%, #001716cc 100%);
     background-size: cover;
     background-position: center;
     color: var(--white);
@@ -214,18 +277,92 @@ header {
     opacity: 1;
 }
 
-/* Basic mobile menu for critical render */
-.mobile-menu-btn {
-    display: none;
-    background: none;
-    border: none;
-    width: 44px;
-    height: 44px;
+/* Basic typography - kritično za čitljivost */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Domine Variable', Georgia, serif;
+    margin-bottom: 1rem;
+    line-height: 1.2;
     color: var(--primary);
+    font-weight: 600;
+}
+
+/* Enhanced typography sizes */
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: var(--space-lg);
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.75rem;
+}
+
+h4 {
     font-size: 1.5rem;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
+}
+
+h5 {
+    font-size: 1.25rem;
+}
+
+h6 {
+    font-size: 1.1rem;
+}
+
+.lead {
+    font-size: 1.2rem;
+    font-weight: 300;
+    opacity: 0.9;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+p {
+    margin-bottom: 1rem;
+    line-height: 1.7;
+}
+
+/* Enhanced links */
+a:hover,
+a:focus {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+/* Button size variants */
+.btn-large {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    min-height: 54px;
+}
+
+.btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    min-height: 36px;
+}
+
+.btn-block {
+    width: 100%;
+    display: flex;
 }
 
 /* Loading state */

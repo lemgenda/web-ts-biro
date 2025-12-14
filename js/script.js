@@ -4,7 +4,7 @@
  * Ova datoteka sadrži sve funkcionalnosti za web stranicu TS-Biro knjigovodstvenog servisa:
  *
  * 1. Mobilni meni - Upravlja prikazom navigacijskog izbornika na mobilnim uređajima
- * 2. Kontakt forme - Upravlja slanjem i validacijom kontakt formi
+ * 2. Kontakt forme - Upravlja slanjem i validacijom kontakt formi (UKLJUČUJUĆI CHECKBOXOVE)
  * 3. FAQ sekcija - Upravlja prikazom i skrivanjem odgovora na česta pitanja
  * 4. Testimonial karusel - Prikazuje klijentske iskaze u rotirajućem karuselu
  * 5. Back to top dugme - Omogućava brzi povratak na vrh stranice
@@ -120,6 +120,21 @@
                 title: 'Financijska vještačenja Sisak | Sudska i privatna vještačenja - TS-Biro',
                 description: 'Financijska i računovodstvena vještačenja u Sisku ✓ Za sudske postupke ✓ Stručno i nepristrano ✓ Diskrecija ✓ Brzi rokovi.',
                 keywords: 'vještačenja Sisak, sudska vještačenja, financijska vještačenja, računovodstvena vještačenja'
+            },
+            '/privatnost.html': {
+                title: 'Politika privatnosti | TS-Biro',
+                description: 'Politika privatnosti TS-Biro knjigovodstvenog servisa. Saznajte kako prikupljamo, koristimo i štitimo vaše podatke.',
+                keywords: 'politika privatnosti, zaštita podataka, GDPR, privatnost, TS-Biro'
+            },
+            '/uvjeti.html': {
+                title: 'Uvjeti korištenja | TS-Biro',
+                description: 'Uvjeti korištenja web stranice TS-Biro knjigovodstvenog servisa. Saznajte pravila i odredbe korištenja naših usluga.',
+                keywords: 'uvjeti korištenja, pravila, odredbe, korištenje web stranice, TS-Biro'
+            },
+            '/404.html': {
+                title: 'Stranica nije pronađena | TS-Biro',
+                description: 'Stranica koju tražite ne postoji. Vratite se na početnu stranicu TS-Biro knjigovodstvenog servisa.',
+                keywords: '404, stranica nije pronađena, error, TS-Biro'
             }
         };
 
@@ -223,6 +238,9 @@
             '/place-kadrovska-evidencija.html': 'Plaće',
             '/financijsko-poslovno-savjetovanje.html': 'Savjetovanje',
             '/sudsko-vjestacenje.html': 'Vještačenje',
+            '/privatnost.html': 'Politika privatnosti',
+            '/uvjeti.html': 'Uvjeti korištenja',
+            '/404.html': '404 Stranica nije pronađena',
             '/index.html': 'Početna',
             '/': 'Početna'
         };
@@ -239,9 +257,9 @@
             currentItem.setAttribute('itemtype', 'https://schema.org/ListItem');
 
             currentItem.innerHTML = `
-                <span itemprop="name">${pageMappings[currentUrl]}</span>
-                <meta itemprop="position" content="2" />
-            `;
+            <span itemprop="name">${pageMappings[currentUrl]}</span>
+            <meta itemprop="position" content="2" />
+        `;
 
             breadcrumbContainer.appendChild(currentItem);
         }
@@ -255,7 +273,9 @@
             '/knjigovodstvo-racunovodstvo.html': 'Računovodstvo',
             '/place-kadrovska-evidencija.html': 'Plaće',
             '/financijsko-poslovno-savjetovanje.html': 'Savjetovanje',
-            '/sudsko-vjestacenje.html': 'Vještačenje'
+            '/sudsko-vjestacenje.html': 'Vještačenje',
+            '/privatnost.html': 'Politika privatnosti',
+            '/uvjeti.html': 'Uvjeti korištenja'
         };
 
         const breadcrumbData = {
@@ -373,7 +393,7 @@
         });
     }
 
-    // 1. MOBILE MENU
+    // 1. MOBILE MENI
     function initializeMobileMenu() {
         const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
         const navMenu = document.querySelector('.nav-menu');
@@ -704,17 +724,33 @@
         startHeroAutoPlay();
     }
 
-    // 5. CONTACT FORMS (INCLUDES VALIDATION)
+    // 5. KONTAKT FORME (UKLJUČUJUĆI CHECKBOX VALIDACIJU)
     function initializeContactForms() {
         const contactForms = document.querySelectorAll('form');
 
         contactForms.forEach(form => {
             // Add real-time validation
-            const inputs = form.querySelectorAll('input[required], textarea[required]');
+            const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
             inputs.forEach(input => {
                 input.addEventListener('blur', () => validateFormField(input));
                 input.addEventListener('input', () => {
                     if (input.validity.valid) clearFieldError(input);
+                });
+            });
+
+            // Handle checkbox interactions
+            const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    const checkboxItem = this.closest('.checkbox-item');
+                    if (checkboxItem) {
+                        if (this.checked) {
+                            checkboxItem.classList.add('checked');
+                            trackEvent('form', 'checkbox_selected', this.value);
+                        } else {
+                            checkboxItem.classList.remove('checked');
+                        }
+                    }
                 });
             });
 
@@ -747,6 +783,13 @@
                     return;
                 }
 
+                // Handle checkbox values - DODANO ZA CHECKBOXOVE
+                const additionalServices = getCheckboxValues('additionalServices[]');
+                if (additionalServices.length > 0) {
+                    formData.append('additionalServices', additionalServices.join(', '));
+                    trackEvent('form', 'additional_services_selected', additionalServices.join(', '));
+                }
+
                 // Show loading state
                 const submitBtn = form.querySelector('button[type="submit"]');
                 const originalText = submitBtn.innerHTML;
@@ -759,6 +802,14 @@
                     showNotification('Hvala vam na upitu! Kontaktirat ćemo vas u najkraćem mogućem roku.', 'success');
                     this.reset();
 
+                    // Reset checkbox styling
+                    checkboxes.forEach(checkbox => {
+                        const checkboxItem = checkbox.closest('.checkbox-item');
+                        if (checkboxItem) {
+                            checkboxItem.classList.remove('checked');
+                        }
+                    });
+
                     // Reset button
                     submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
@@ -768,6 +819,12 @@
                 }, 1500);
             });
         });
+    }
+
+    // Helper function to get checkbox values - NOVA FUNKCIJA ZA CHECKBOXOVE
+    function getCheckboxValues(name) {
+        const checkboxes = document.querySelectorAll(`input[name="${name}"]:checked`);
+        return Array.from(checkboxes).map(cb => cb.value);
     }
 
     // Form validation helper
@@ -946,6 +1003,7 @@
     window.TSBiro = {
         showNotification,
         trackEvent,
-        validateFormField
+        validateFormField,
+        getCheckboxValues
     };
 })();

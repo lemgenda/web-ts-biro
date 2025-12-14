@@ -11,7 +11,6 @@ Crawl-delay: 1
 
 # Sitemaps
 Sitemap: https://www.ts-biro.hr/sitemap.xml
-Sitemap: https://www.ts-biro.hr/sitemap-images.xml
 
 # Allow major search engines
 User-agent: Googlebot
@@ -47,9 +46,3 @@ Crawl-delay: 2
 User-agent: Twitterbot
 Allow: /
 Crawl-delay: 2
-
-# Host
-Host: https://www.ts-biro.hr
-
-# Visit-time
-Visit-time: 0800-2000

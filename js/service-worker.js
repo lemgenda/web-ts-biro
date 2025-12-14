@@ -7,7 +7,7 @@ const CRITICAL_URLS = [
     './js/script.js',
     './images/TS-Biro-Circle-logo.svg',
     './images/icons/favicon.ico',
-    './config/manifest.json'
+    './manifest.json'  // Updated path
 ];
 
 const NON_CRITICAL_URLS = [
@@ -16,6 +16,9 @@ const NON_CRITICAL_URLS = [
     './place-kadrovska-evidencija.html',
     './financijsko-poslovno-savjetovanje.html',
     './sudsko-vjestacenje.html',
+    './404.html',
+    './uvjeti.html',
+    './privatnost.html',
     './fonts/Figtree-VariableFont_wght.ttf',
     './fonts/Domine-VariableFont_wght.ttf'
 ];

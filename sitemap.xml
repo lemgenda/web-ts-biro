@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Početna stranica - najveći prioritet -->
+  <url>
+    <loc>https://www.ts-biro.hr/</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <!-- Logo images -->
+    <image:image>
+      <image:loc>https://www.ts-biro.hr/images/TS-Biro-Circle-logo.svg</image:loc>
+      <image:title>TS-Biro Logo - Profesionalno računovodstvo Sisak</image:title>
+      <image:caption>TS-Biro - Obiteljska računovodstvena tvrtka s 30+ godina iskustva</image:caption>
+    </image:image>
+    <!-- Hero/feature images -->
+    <image:image>
+      <image:loc>https://www.ts-biro.hr/images/businesswoman-using-laptop.jpg</image:loc>
+      <image:title>Profesionalno računovodstvo u Sisku</image:title>
+      <image:caption>Naš tim stručnjaka pruža kvalitetne računovodstvene usluge</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ts-biro.hr/images/businesswoman-using-laptop.webp</image:loc>
+      <image:title>Profesionalno računovodstvo u Sisku (WebP format)</image:title>
+    </image:image>
+  </url>
+
+  <!-- Knjigovodstvo i računovodstvo - visok prioritet -->
+  <url>
+    <loc>https://www.ts-biro.hr/knjigovodstvo-racunovodstvo.html</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://www.ts-biro.hr/images/services/accounting-intro.jpg</image:loc>
+      <image:title>Knjigovodstvene usluge u Sisku</image:title>
+      <image:caption>Kompletno knjigovodstvo za tvrtke i obrte u Sisku i široj regiji</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ts-biro.hr/images/services/accounting-intro.webp</image:loc>
+      <image:title>Knjigovodstvene usluge u Sisku (WebP format)</image:title>
+    </image:image>
+  </url>
+
+  <!-- Plaće i kadrovska evidencija - visok prioritet -->
+  <url>
+    <loc>https://www.ts-biro.hr/place-kadrovska-evidencija.html</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://www.ts-biro.hr/images/services/payroll-intro.jpg</image:loc>
+      <image:title>Obračun plaća Sisak</image:title>
+      <image:caption>Profesionalan obračun plaća za tvrtke u Sisku i cijeloj Hrvatskoj</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ts-biro.hr/images/services/payroll-intro.webp</image:loc>
+      <image:title>Obračun plaća Sisak (WebP format)</image:title>
+    </image:image>
+  </url>
+
+  <!-- Financijsko i poslovno savjetovanje - srednji prioritet -->
+  <url>
+    <loc>https://www.ts-biro.hr/financijsko-poslovno-savjetovanje.html</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.ts-biro.hr/images/services/consulting-intro.jpg</image:loc>
+      <image:title>Financijsko savjetovanje Sisak</image:title>
+      <image:caption>Stručno financijsko savjetovanje za poslovni uspjeh vaše tvrtke</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ts-biro.hr/images/services/consulting-intro.webp</image:loc>
+      <image:title>Financijsko savjetovanje Sisak (WebP format)</image:title>
+    </image:image>
+  </url>
+
+  <!-- Sudsko vještačenje - srednji prioritet -->
+  <url>
+    <loc>https://www.ts-biro.hr/sudsko-vjestacenje.html</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.ts-biro.hr/images/services/expertise-intro.jpg</image:loc>
+      <image:title>Sudska vještačenja Sisak</image:title>
+      <image:caption>Financijska i računovodstvena vještačenja za sudske postupke</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ts-biro.hr/images/services/expertise-intro.webp</image:loc>
+      <image:title>Sudska vještačenja Sisak (WebP format)</image:title>
+    </image:image>
+  </url>
+
+  <!-- Icons and screenshots (separate section for non-page images) -->
+  <url>
+    <loc>https://www.ts-biro.hr/manifest.json</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.1</priority>
+    <!-- Favicons -->
+    <image:image>
+      <image:loc>https://www.ts-biro.hr/images/icons/favicon-16x16.png</image:loc>
+      <image:title>TS-Biro favicon 16x16</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ts-biro.hr/images/icons/favicon-32x32.png</image:loc>
+      <image:title>TS-Biro favicon 32x32</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ts-biro.hr/images/icons/android-chrome-192x192.png</image:loc>
+      <image:title>TS-Biro PWA icon 192x192</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ts-biro.hr/images/icons/android-chrome-512x512.png</image:loc>
+      <image:title>TS-Biro PWA icon 512x512</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ts-biro.hr/images/icons/icon-72x72.png</image:loc>
+      <image:title>TS-Biro icon 72x72</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ts-biro.hr/images/icons/contact-icon.png</image:loc>
+      <image:title>TS-Biro kontakt ikona</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ts-biro.hr/images/icons/services-icon.png</image:loc>
+      <image:title>TS-Biro usluge ikona</image:title>
+    </image:image>
+    <!-- Screenshots -->
+    <image:image>
+      <image:loc>https://www.ts-biro.hr/images/screenshots/desktop.jpg</image:loc>
+      <image:title>TS-Biro desktop stranica screenshot</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ts-biro.hr/images/screenshots/mobile.jpg</image:loc>
+      <image:title>TS-Biro mobilna stranica screenshot</image:title>
+    </image:image>
+  </url>
+
+  <!-- Privacy and terms pages -->
+  <url>
+    <loc>https://www.ts-biro.hr/privatnost.html</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://www.ts-biro.hr/uvjeti.html</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- 404 page -->
+  <url>
+    <loc>https://www.ts-biro.hr/404.html</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.1</priority>
+  </url>
+
+</urlset>

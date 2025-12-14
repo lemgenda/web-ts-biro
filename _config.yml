@@ -1,0 +1,40 @@
+# _config.yml for TS Biro GitHub Pages
+
+# Site settings
+title: "TS Biro"
+description: "Knjigovodstvo, računovodstvo i financijsko savjetovanje"
+baseurl: "/web-ts-biro"  # The subpath of your site
+url: "https://lemgenda.github.io"  # Your GitHub Pages URL
+
+# Build settings
+markdown: kramdown
+permalink: pretty
+include: [".html", ".md"]  # Include HTML files in processing
+exclude: ["node_modules", "vendor", "*.log", "*.tmp"]
+keep_files: [".git", ".svn"]
+
+# Custom settings
+theme: null  # No theme (using custom HTML)
+plugins: []  # No plugins needed for static site
+
+# Collections
+collections:
+  pages:
+    output: true
+    permalink: /:path/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: null  # No layout, using your HTML files directly
+
+# Sitemap settings
+sitemap:
+  sitemap_extension: ".xml"
+  file_path: "/config/sitemap.xml"
+
+# Enable HTML processing
+include: [".html"]

@@ -17,45 +17,45 @@
     ],
     "icons": [
         {
-            "src": "images/icons/favicon-16x16.png",
+            "src": "/images/icons/favicon-16x16.png",
             "sizes": "16x16",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "images/icons/favicon-32x32.png",
+            "src": "/images/icons/favicon-32x32.png",
             "sizes": "32x32",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "images/icons/android-chrome-192x192.png",
+            "src": "/images/icons/android-chrome-192x192.png",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "any maskable"
         },
         {
-            "src": "images/icons/android-chrome-512x512.png",
+            "src": "/images/icons/android-chrome-512x512.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any maskable"
         },
         {
-            "src": "images/icons/favicon.ico",
+            "src": "/images/icons/favicon.ico",
             "sizes": "64x64 32x32 24x24 16x16",
             "type": "image/x-icon"
         }
     ],
     "screenshots": [
         {
-            "src": "images/screenshots/desktop.jpg",
+            "src": "/images/screenshots/desktop.jpg",
             "sizes": "1280x720",
             "type": "image/jpeg",
             "form_factor": "wide",
             "label": "TS-Biro desktop stranica"
         },
         {
-            "src": "images/screenshots/mobile.jpg",
+            "src": "/images/screenshots/mobile.jpg",
             "sizes": "750x1334",
             "type": "image/jpeg",
             "form_factor": "narrow",
@@ -70,7 +70,7 @@
             "url": "/#kontakt",
             "icons": [
                 {
-                    "src": "images/icons/contact-icon.png",
+                    "src": "/images/icons/contact-icon.png",
                     "sizes": "96x96"
                 }
             ]
@@ -82,7 +82,7 @@
             "url": "/#usluge",
             "icons": [
                 {
-                    "src": "images/icons/services-icon.png",
+                    "src": "/images/icons/services-icon.png",
                     "sizes": "96x96"
                 }
             ]

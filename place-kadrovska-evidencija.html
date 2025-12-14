@@ -12,14 +12,14 @@
     <title>Obračun Plaća Sisak | Kadrovska evidencija za tvrtke - TS-Biro</title>
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://www.ts-biro.hr/place-kadrovska-evidencija.html">
+    <link rel="canonical" href="https://www.ts-biro.hr/place-kadrovska-evidencija">
 
     <!-- Open Graph & Twitter tags -->
     <meta property="og:title" content="Obračun Plaća Sisak | Kadrovska evidencija za tvrtke">
     <meta property="og:description"
         content="Profesionalan obračun plaća i kadrovska evidencija u Sisku. Točno, pravovremeno i diskretno. Besplatna procjena.">
     <meta property="og:image" content="https://www.ts-biro.hr/images/services/payroll-service.jpg">
-    <meta property="og:url" content="https://www.ts-biro.hr/place-kadrovska-evidencija.html">
+    <meta property="og:url" content="https://www.ts-biro.hr/place-kadrovska-evidencija">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="TS-Biro">
     <meta property="og:locale" content="hr_HR">
@@ -52,6 +52,7 @@
 
     <!-- JavaScript in head with defer -->
     <script src="js/script.js" defer></script>
+    <script src="js/service-worker.js" defer></script>
 
     <!-- Structured Data for Service -->
     <script type="application/ld+json">
@@ -190,7 +191,7 @@
     <header>
         <div class="container">
             <div class="header-container">
-                <a href="index.html" class="logo" aria-label="TS-Biro - Početna stranica">
+                <a href="./" class="logo" aria-label="TS-Biro - Početna stranica">
                     <img src="images/TS-Biro-Circle-logo.svg" width="128" height="50"
                         alt="TS-Biro Logo - Obiteljska računovodstvena tvrtka | Obračun plaća Sisak"
                         title="TS-Biro - Pouzdan obračun plaća za vaše zaposlenike" loading="eager" decoding="async"
@@ -203,18 +204,18 @@
                         <i class="fa-solid fa-bars" aria-hidden="true"></i>
                     </button>
                     <ul class="nav-menu" id="primary-navigation">
-                        <li class="nav-item"><a href="index.html" class="nav-link">Početna</a></li>
-                        <li class="nav-item"><a href="index.html#usluge" class="nav-link">Usluge</a></li>
-                        <li class="nav-item"><a href="index.html#onama" class="nav-link">O nama</a></li>
-                        <li class="nav-item"><a href="index.html#klijenti" class="nav-link">Klijenti</a></li>
-                        <li class="nav-item"><a href="index.html#kontakt" class="nav-link">Kontakt</a></li>
-                        <li class="nav-item"><a href="knjigovodstvo-racunovodstvo.html"
+                        <li class="nav-item"><a href="./" class="nav-link">Početna</a></li>
+                        <li class="nav-item"><a href="./#usluge" class="nav-link">Usluge</a></li>
+                        <li class="nav-item"><a href="./#onama" class="nav-link">O nama</a></li>
+                        <li class="nav-item"><a href="./#klijenti" class="nav-link">Klijenti</a></li>
+                        <li class="nav-item"><a href="./#kontakt" class="nav-link">Kontakt</a></li>
+                        <li class="nav-item"><a href="./knjigovodstvo-racunovodstvo.html"
                                 class="nav-link">Računovodstvo</a></li>
-                        <li class="nav-item"><a href="place-kadrovska-evidencija.html" class="nav-link active">Plaće</a>
+                        <li class="nav-item"><a href="./place-kadrovska-evidencija.html" class="nav-link active">Plaće</a>
                         </li>
-                        <li class="nav-item"><a href="financijsko-poslovno-savjetovanje.html"
+                        <li class="nav-item"><a href="./financijsko-poslovno-savjetovanje.html"
                                 class="nav-link">Savjetovanje</a></li>
-                        <li class="nav-item"><a href="sudsko-vjestacenje.html" class="nav-link">Vještačenje</a></li>
+                        <li class="nav-item"><a href="./sudsko-vjestacenje.html" class="nav-link">Vještačenje</a></li>
                     </ul>
                 </nav>
             </div>
@@ -226,7 +227,7 @@
         <div class="container">
             <ol itemscope itemtype="https://schema.org/BreadcrumbList">
                 <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                    <a href="index.html" itemprop="item">
+                    <a href="./" itemprop="item">
                         <span itemprop="name">Početna</span>
                     </a>
                     <meta itemprop="position" content="1" />
@@ -255,7 +256,44 @@
             </div>
         </div>
     </section>
+    <section class="intro-section">
+        <div class="container">
+            <div class="intro-content">
+                <div class="intro-text">
+                    <h2>Pouzdan obračun plaća za vaše zaposlenike</h2>
+                    <p>Naš tim stručnjaka brine o svim vašim kadrovskim i platnim obvezama s <strong>maksimalnom preciznošću i
+                            diskrecijom</strong>. Omogućujemo vam da se fokusirate na poslovanje, dok mi vodimo kompletnu administraciju
+                        vaših zaposlenika.</p>
 
+                    <div class="intro-highlights">
+                        <div class="highlight-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Točan i pravovremen obračun plaća</span>
+                        </div>
+                        <div class="highlight-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Potpuna diskrecija i sigurnost podataka</span>
+                        </div>
+                        <div class="highlight-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Automatske prijave i odjave kod HZMO</span>
+                        </div>
+                        <div class="highlight-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Evidencija godišnjih odmora i bolovanja</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="intro-image">
+                    <picture>
+                        <source srcset="images/services/payroll-intro.webp" type="image/webp">
+                        <img src="images/services/payroll-intro.jpg" alt="Obračun plaća i kadrovska evidencija TS-Biro Sisak"
+                            loading="lazy" decoding="async">
+                    </picture>
+                </div>
+            </div>
+        </div>
+    </section>
     <!-- Main Content -->
     <main id="main-content">
         <!-- Service Details -->
@@ -490,18 +528,47 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="additionalServices">
+                                <label>
                                     <i class="fas fa-tasks" aria-hidden="true"></i>
-                                    <span>Dodatne usluge</span>
+                                    <span>Dodatne usluge (opcionalno)</span>
                                 </label>
-                                <select id="additionalServices" name="additionalServices" multiple>
-                                    <option value="prijave">Prijave/odjave radnika</option>
-                                    <option value="odmori">Evidencija godišnjih odmora</option>
-                                    <option value="bolovanja">Bolovanja i naknade</option>
-                                    <option value="putni">Putni troškovi</option>
-                                    <option value="obrasci">Prijave HZMO i drugi obrasci</option>
-                                </select>
-                                <small class="text-muted">Držite Ctrl za odabir više opcija</small>
+                                <div class="checkbox-group">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="additional-prijave" name="additionalServices[]" value="prijave">
+                                        <label for="additional-prijave" class="checkbox-label">
+                                            <i class="fas fa-user-plus"></i>
+                                            Prijave/odjave radnika
+                                        </label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="additional-odmori" name="additionalServices[]" value="odmori">
+                                        <label for="additional-odmori" class="checkbox-label">
+                                            <i class="fas fa-umbrella-beach"></i>
+                                            Evidencija godišnjih odmora
+                                        </label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="additional-bolovanja" name="additionalServices[]" value="bolovanja">
+                                        <label for="additional-bolovanja" class="checkbox-label">
+                                            <i class="fas fa-procedures"></i>
+                                            Bolovanja i naknade
+                                        </label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="additional-putni" name="additionalServices[]" value="putni">
+                                        <label for="additional-putni" class="checkbox-label">
+                                            <i class="fas fa-car"></i>
+                                            Putni troškovi
+                                        </label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="additional-obrasci" name="additionalServices[]" value="obrasci">
+                                        <label for="additional-obrasci" class="checkbox-label">
+                                            <i class="fas fa-file-alt"></i>
+                                            Prijave HZMO i drugi obrasci
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="message">
@@ -528,8 +595,8 @@
                 <div class="footer-section">
                     <div class="logo" itemscope itemtype="https://schema.org/AccountingService">
                         <img src="images/TS-Biro-Circle-logo.svg" width="255" height="100"
-                            alt="TS-Biro Logo - Obiteljska računovodstvena tvrtka | Obračun plaća Sisak"
-                            title="TS-Biro - Profesionalan obračun plaća Sisak" loading="lazy" decoding="async"
+                            alt="TS-Biro Logo - Obiteljska računovodstvena tvrtka | Knjigovodstvo, računovodstvo i financijsko savjetovanje"
+                            title="TS-Biro - Profesionalno računovodstvo Sisak" loading="lazy" decoding="async"
                             itemprop="logo" class="logo-img">
                     </div>
                     <p>Tvoja sigurnost. Tvoj servis. Tvoje savjetništvo.</p>
@@ -545,28 +612,30 @@
                 <div class="footer-section">
                     <h4>Usluge</h4>
                     <ul>
-                        <li><a href="knjigovodstvo-racunovodstvo.html">Računovodstvo</a></li>
-                        <li><a href="place-kadrovska-evidencija.html">Plaće</a></li>
-                        <li><a href="financijsko-poslovno-savjetovanje.html">Savjetovanje</a></li>
-                        <li><a href="sudsko-vjestacenje.html">Vještačenje</a></li>
+                        <li><a href="./knjigovodstvo-racunovodstvo.html">Računovodstvo</a></li>
+                        <li><a href="./place-kadrovska-evidencija.html">Plaće</a></li>
+                        <li><a href="./financijsko-poslovno-savjetovanje.html">Savjetovanje</a></li>
+                        <li><a href="./sudsko-vjestacenje.html">Vještačenje</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h4>Linkovi</h4>
                     <ul>
-                        <li><a href="index.html#onama">O nama</a></li>
-                        <li><a href="index.html#klijenti">Klijenti</a></li>
-                        <li><a href="index.html#kontakt">Kontakt</a></li>
+                        <li><a href="./#onama">O nama</a></li>
+                        <li><a href="./#klijenti">Klijenti</a></li>
+                        <li><a href="./#kontakt">Kontakt</a></li>
+                        <li><a href="./privatnost.html">Privatnost</a></li>
+                        <li><a href="./uvjeti.html">Uvjeti</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h4>Kontakt</h4>
                     <ul>
                         <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Ferde Livadića 29, Sisak</li>
-                        <li><i class="fas fa-phone" aria-hidden="true"></i> <a href="tel:+385915212770">+385 91 521
-                                2770</a></li>
-                        <li><i class="fas fa-phone" aria-hidden="true"></i><a href="tel:+38598376475">+385 98 376
-                                475</a></li>
+                        <li><i class="fas fa-phone" aria-hidden="true"></i> <a href="tel:+385915212770">+385 91 521 2770</a>
+                        </li>
+                        <li><i class="fas fa-phone" aria-hidden="true"></i><a href="tel:+38598376475">+385 98 376 475</a>
+                        </li>
                         <li><i class="fas fa-envelope" aria-hidden="true"></i> <a
                                 href="mailto:info@ts-biro.hr">info@ts-biro.hr</a></li>
                     </ul>
@@ -574,11 +643,13 @@
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2025 TS-Biro. Sva prava pridržana.</p>
-                <p><a href="privatnost.html">Politika privatnosti</a> | <a href="uvjeti.html">Uvjeti korištenja</a></p>
             </div>
         </div>
     </footer>
-
+    <!-- Back to Top Button -->
+    <a href="#" id="backToTop" class="back-to-top" aria-label="Povratak na vrh stranice">
+        <i class="fas fa-chevron-up" aria-hidden="true"></i>
+    </a>
     <!-- Cookie Consent Banner -->
     <div id="cookieConsent" class="cookie-consent" role="dialog" aria-labelledby="cookie-heading"
         aria-describedby="cookie-desc">
@@ -591,11 +662,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Back to Top Button -->
-    <a href="#" id="backToTop" class="back-to-top" aria-label="Povratak na vrh stranice">
-        <i class="fas fa-chevron-up" aria-hidden="true"></i>
-    </a>
 </body>
 
 </html>
