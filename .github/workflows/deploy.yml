@@ -19,9 +19,9 @@ jobs:
     - name: Deploy via FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
-        server: ${{ secrets.ftp.ts-biro.hr }}
-        username: ${{ secrets.tsbirohr }}
-        password: ${{ secrets.m5v89F0dHr }}
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
         port: 21
         protocol: ftp
         local-dir: ./
